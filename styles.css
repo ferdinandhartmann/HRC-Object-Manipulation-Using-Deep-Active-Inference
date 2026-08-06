@@ -824,6 +824,15 @@ figcaption {
     width: 100%;
 }
 
+.no-crop-figure img {
+    width: 100%;
+    height: auto;
+    max-width: 100%;
+    margin: 0;
+    transform: none;
+    object-fit: contain;
+}
+
 figcaption {
     padding: 12px 14px 14px;
     font-size: 0.92rem;
@@ -871,11 +880,12 @@ figcaption {
     display: grid;
     align-content: start;
     gap: 12px;
-    padding: 20px;
-    border: 1px solid var(--line);
+    min-height: 100%;
+    padding: 22px;
+    border: 1px solid #c7d1df;
     border-radius: 8px;
     background: white;
-    box-shadow: 0 8px 24px rgba(22, 32, 52, 0.06);
+    box-shadow: 0 14px 34px rgba(22, 32, 52, 0.11);
 }
 
 .teleop-layout.paired-data h3 {
@@ -888,7 +898,10 @@ figcaption {
 }
 
 .teleop-layout.paired-data figure {
-    border: 0;
+    overflow: hidden;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    background: white;
     box-shadow: none;
 }
 
@@ -905,14 +918,10 @@ figcaption {
     object-fit: cover;
 }
 
-.teleop-layout.paired-data img {
-    height: 320px;
-    object-fit: cover;
-}
-
 .data-overview-figure {
     width: min(100%, 560px);
     margin: 22px auto 0;
+    box-shadow: 0 14px 34px rgba(22, 32, 52, 0.11);
 }
 
 .top-crop-image {

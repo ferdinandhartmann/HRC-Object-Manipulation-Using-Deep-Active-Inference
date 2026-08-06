@@ -58,6 +58,17 @@ Then open [localhost:4173](http://localhost:4173).
 
 If the VS Code browser shows an old version after editing `index.html`, `styles.css`, or `script.js`, hard-refresh the Simple Browser tab or close and reopen it. Use the server URL instead of opening `index.html` directly so the interactive JavaScript and media paths behave like the deployed site.
 
+## Cache Busting
+
+When changing `styles.css` or `script.js`, bump the version query in `index.html` so browsers fetch the new files after deployment:
+
+```html
+<link rel="stylesheet" href="./styles.css?v=20260806-3">
+<script src="./script.js?v=20260806-3" defer></script>
+```
+
+Use any newer value, for example `?v=20260807-1`. After GitHub Pages redeploys, hard-refresh the browser with `Ctrl+Shift+R` if the old styling is still visible.
+
 ## Assets
 
 All media used by the website is copied into `assets/` so the GitHub Pages deployment is self-contained.
