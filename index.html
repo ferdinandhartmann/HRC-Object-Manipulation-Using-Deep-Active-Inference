@@ -139,7 +139,7 @@
                                 <span data-goal-ig-value>0.00</span>
                             </div>
                             <svg viewBox="0 0 300 92" role="img" aria-label="Goal entropy to Goal IG sigmoid">
-                                <rect class="plot-frame" x="58" y="10" width="222" height="56"></rect>
+                                <rect class="plot-frame" x="58" y="10" width="222" height="56" rx="3"></rect>
                                 <line class="plot-axis" x1="58" x2="280" y1="66" y2="66"></line>
                                 <line class="plot-axis" x1="58" x2="58" y1="10" y2="66"></line>
                                 <text class="plot-end-label" x="6" y="14">explore</text>
@@ -158,7 +158,7 @@
                                 <span data-mode-value>0.00</span>
                             </div>
                             <svg viewBox="0 0 300 92" role="img" aria-label="Goal entropy to boxlift interaction mode sigmoid">
-                                <rect class="plot-frame" x="58" y="10" width="222" height="56"></rect>
+                                <rect class="plot-frame" x="58" y="10" width="222" height="56" rx="3"></rect>
                                 <line class="plot-axis" x1="58" x2="280" y1="66" y2="66"></line>
                                 <line class="plot-axis" x1="58" x2="58" y1="10" y2="66"></line>
                                 <text class="plot-end-label" x="21" y="14">lead</text>
@@ -281,8 +281,10 @@
                 <article>
                     <h3>Leading Demonstrations</h3>
                     <figure>
-                        <img src="./assets/images/teleop-factr.jpg" alt="FACTR leader arm and Franka boxlift setup">
-                        <figcaption>FACTR Cartesian teleoperation maps the leader arm motion to Franka follower commands for goal-directed boxlift demonstrations.</figcaption>
+                        <div class="vertical-crop-image">
+                            <img src="./assets/images/teleop-factr.jpg" alt="FACTR leader arm and Franka boxlift setup">
+                        </div>
+                        <figcaption>Cartesian teleoperation based on <a href="https://github.com/JasonJZLiu/FACTR_Hardware">FACTR</a> maps the leader arm motion to Franka follower commands for goal-directed boxlift demonstrations.</figcaption>
                     </figure>
                 </article>
                 <article>
