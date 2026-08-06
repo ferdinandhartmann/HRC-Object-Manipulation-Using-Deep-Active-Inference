@@ -1,0 +1,357 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Master thesis project website for Human-Robot Collaborative Object Manipulation Using Deep Active Inference by Ferdinand Hartmann.">
+    <title>Human-Robot Collaborative Object Manipulation Using Deep Active Inference</title>
+    <link rel="stylesheet" href="./styles.css">
+    <script src="./script.js" defer></script>
+</head>
+<body>
+    <a class="skip-link" href="#main-content">Skip to main content</a>
+
+    <nav class="site-nav" aria-label="Primary navigation">
+        <a href="#overview">Overview</a>
+        <a href="#method">Method</a>
+        <a href="#implementation">Implementation</a>
+        <a href="#teleoperation">Teleoperation</a>
+        <a href="#experiments">Experiments</a>
+    </nav>
+
+    <header class="hero" id="overview">
+        <div class="hero-media" aria-hidden="true">
+            <img src="./assets/images/experiment-overview-1.jpg" alt="">
+        </div>
+        <div class="hero-content">
+            <p class="eyebrow">Master Thesis Project</p>
+            <h1>Human-Robot Collaborative Object Manipulation Using Deep Active Inference</h1>
+            <p class="hero-copy">A real-time active-inference system for physical human-robot collaboration with a Franka Research 3 arm. The robot infers human intent, balances following and leading, and selects action chunks for collaborative box lifting and stacking.</p>
+            <dl class="hero-meta">
+                <div><dt>Student</dt><dd>Ferdinand Hartmann</dd></div>
+                <div><dt>Supervisor</dt><dd>Shingo Murata</dd></div>
+                <div class="meta-small"><dt>Co-supervisor</dt><dd>Vincent Fremont</dd></div>
+                <div><dt>Program</dt><dd>Keio University · EC Nantes<br>JEMARO Double Degree Master</dd></div>
+            </dl>
+        </div>
+    </header>
+
+    <main id="main-content">
+        <section class="section intro-section">
+            <div class="section-heading">
+                <p class="section-kicker">Why It Matters</p>
+                <h2>Collaborative manipulation needs more than reactive compliance.</h2>
+            </div>
+            <div class="intro-grid">
+                <article>
+                    <h3>Problem</h3>
+                    <p>Physical human-robot collaboration combines human adaptability with robotic precision and strength. In shared object manipulation, the human's intended goal is often only partially visible from motion and contact forces.</p>
+                </article>
+                <article>
+                    <h3>Core Idea</h3>
+                    <p>A purely reactive robot can follow safely, but it cannot intentionally lead. This thesis uses deep active inference so the robot can choose actions that help the task while also clarifying the human's intention.</p>
+                </article>
+                <article>
+                    <h3>Contribution</h3>
+                    <p>ACT is used as a fast stochastic proposal model for active inference, generating diverse short-horizon action chunks that can be ranked by expected free energy in real time.</p>
+                </article>
+            </div>
+            <article class="abstract-card">
+                <h3>Abstract</h3>
+                <p>The proposed system combines an Action Chunking with Transformers policy model, a learned world model, and an explicit categorical posterior over human goals. Candidate action chunks are evaluated by expected free energy, balancing information gain about the human's goal and hidden interaction state with pragmatic value for leading or following behavior. On a Franka Research 3 robot in a force-dependent collaborative box-lifting and transport task, the framework reduces goal uncertainty faster than passive inference baselines and provides stronger collaborative assistance, while also showing that EFE selection depends strongly on world-model accuracy.</p>
+            </article>
+        </section>
+
+        <section class="section media-feature" aria-label="Featured experiment video">
+            <div class="section-heading compact">
+                <p class="section-kicker">Result In Motion</p>
+                <h2>Full box-lift experiment</h2>
+            </div>
+            <video controls muted playsinline preload="metadata">
+                <source src="./assets/videos/full-experiment.mp4" type="video/mp4">
+                Your browser cannot play this video.
+            </video>
+        </section>
+
+        <section class="section" id="method">
+            <div class="section-heading">
+                <p class="section-kicker">Method</p>
+                <h2>Deep active inference over candidate action chunks.</h2>
+            </div>
+            <div class="flow" aria-label="AIF method flow">
+                <article>
+                    <span>01</span>
+                    <h3>Observe</h3>
+                    <p>End-effector pose, velocity, wrench, tracking error, command pose, last action, and interaction labels are collected into a temporal observation window.</p>
+                </article>
+                <article>
+                    <span>02</span>
+                    <h3>Predict</h3>
+                    <p>An ACT-based policy model proposes temporally coherent Cartesian action chunks. A world model evaluates future observations under those candidate policies.</p>
+                </article>
+                <article>
+                    <span>03</span>
+                    <h3>Select</h3>
+                    <p>Expected Free Energy combines pragmatic value, goal information gain, and state information gain. The lowest-EFE trajectory becomes the selected action chunk.</p>
+                </article>
+                <article>
+                    <span>04</span>
+                    <h3>Act And Update</h3>
+                    <p>The controller executes the selected chunk while the world model updates from new observations at 30 Hz.</p>
+                </article>
+            </div>
+
+            <div class="belief-demo" data-belief-demo>
+                <div>
+                    <p class="section-kicker">Interactive Explainer</p>
+                    <h3>Uncertainty controls the role transition.</h3>
+                    <p data-belief-copy>When goal certainty is low, the system values information gain and tends to follow or explore to infer the human's intended goal.</p>
+                </div>
+                <div class="belief-controls" role="group" aria-label="Belief state">
+                    <button class="is-selected" type="button" data-belief="uncertain">Low certainty</button>
+                    <button type="button" data-belief="certain">High certainty</button>
+                </div>
+                <div class="belief-panel">
+                    <div class="belief-bars" aria-hidden="true">
+                        <span style="height: 76%"></span>
+                        <span style="height: 52%"></span>
+                        <span style="height: 39%"></span>
+                        <span style="height: 63%"></span>
+                    </div>
+                    <strong data-belief-mode>Follow / explore</strong>
+                    <small data-belief-detail>Goal information gain dominates the action choice.</small>
+                </div>
+            </div>
+            <div class="method-plots">
+                <figure>
+                    <img src="./assets/result-images/thesis_goal_entropy_goal_ig_v2_3goals-01.png" alt="Sigmoid mapping from goal entropy to goal information-gain weight">
+                    <figcaption><strong>Goal entropy to goal-information-gain weight.</strong> The sigmoid increases epistemic pressure when the goal remains uncertain.</figcaption>
+                </figure>
+                <figure>
+                    <img src="./assets/result-images/thesis_goal_entropy_boxlift_mode_3goals-01.png" alt="Sigmoid mapping from goal entropy to interaction mode">
+                    <figcaption><strong>Goal entropy to interaction mode.</strong> The sigmoid maps uncertainty to the transition between following and leading behavior.</figcaption>
+                </figure>
+            </div>
+            <div class="diagram-pair">
+                <figure>
+                    <img src="./assets/result-images/thesis_diagramms-01.png" alt="Overview of the active inference system">
+                    <figcaption><strong>Method overview.</strong> Observations update the hidden state and goal belief; candidate actions are generated, evaluated, and selected for the real robot.</figcaption>
+                </figure>
+            </div>
+            <div class="model-diagrams">
+                <figure>
+                    <img src="./assets/diagram-images/act_diagramm-01.png" alt="ACT-based policy model diagram">
+                    <figcaption><strong>Policy model.</strong> The ACT-based model creates diverse, temporally coherent candidate action chunks for the robot.</figcaption>
+                </figure>
+                <figure>
+                    <img src="./assets/diagram-images/wm_update_diagramm-01.png" alt="World model update diagram">
+                    <figcaption><strong>World-model update.</strong> New observations are used to keep the internal model aligned with the real interaction.</figcaption>
+                </figure>
+                <figure>
+                    <img src="./assets/diagram-images/wm_planning_diagramm-01.png" alt="World model planning diagram">
+                    <figcaption><strong>World-model planning.</strong> Candidate futures are evaluated with pragmatic value, state information gain, and goal information gain.</figcaption>
+                </figure>
+            </div>
+        </section>
+
+        <section class="section implementation" id="implementation">
+            <div class="section-heading">
+                <p class="section-kicker">Implementation</p>
+                <h2>The real-time robot system separates action generation from action evaluation.</h2>
+            </div>
+            <div class="system-map">
+                <button type="button" class="system-node is-active" data-system="gpu">GPU AIF</button>
+                <button type="button" class="system-node" data-system="controller">Execution</button>
+                <button type="button" class="system-node" data-system="path">Handoff</button>
+                <button type="button" class="system-node" data-system="franka">Low-Level Control</button>
+                <button type="button" class="system-node" data-system="viz">Visualization</button>
+            </div>
+            <article class="system-detail" data-system-detail>
+                <h3>GPU AIF inference</h3>
+                <p>The inference runtime builds the recent interaction history and sends it to a GPU server. The server proposes candidate action chunks, evaluates them with the world model, and returns the selected action for the robot.</p>
+                <ul>
+                    <li>30 Hz timestep loop with 10-step planning phases.</li>
+                    <li>The observation history includes robot motion, interaction forces, tracking behavior, previous commands, and interaction mode information.</li>
+                    <li>The system records selected trajectories, candidate samples, goal belief, EFE metrics, surprise, and timing diagnostics for later analysis.</li>
+                </ul>
+            </article>
+
+            <div class="implementation-grid">
+                <figure>
+                    <img src="./assets/images/realtime-inference.png" alt="Real-time inference architecture diagram">
+                    <figcaption>Real-time inference architecture used to connect policy prediction, world-model update, action execution, and visualization.</figcaption>
+                </figure>
+                <div class="facts">
+                    <div><strong>30 Hz</strong><span>world-model update and observation recording</span></div>
+                    <div><strong>3 Hz</strong><span>planning cadence through 10-step action chunks</span></div>
+                    <div><strong>9 goals</strong><span>physical boxlift positions for goal inference and stacking</span></div>
+                    <div><strong>300 Hz</strong><span>smooth Cartesian command execution on the robot</span></div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section controllers-section">
+            <div class="section-heading">
+                <p class="section-kicker">Control Layer</p>
+                <h2>Custom Franka controllers turn selected actions into compliant robot motion.</h2>
+            </div>
+            <div class="cards three">
+                <article>
+                    <h3>Cartesian Impedance</h3>
+                    <p>Tracks selected end-effector pose commands with stiffness, damping, torque limits, wrench limits, startup protection, and first-command smoothing.</p>
+                </article>
+                <article>
+                    <h3>Cartesian Admittance</h3>
+                    <p>Converts measured external wrench into compliant motion. This supports human-following behavior and can receive equilibrium and gain commands for variable-stiffness AIF experiments.</p>
+                </article>
+                <article>
+                    <h3>Trajectory Handoff</h3>
+                    <p>The execution layer interpolates selected action chunks, keeps commands inside the workspace, handles stale predictions, and coordinates finish/reset behavior between trials.</p>
+                </article>
+            </div>
+            <figure class="wide-figure">
+                <img src="./assets/diagram-images/admittance_diagramm-01.png" alt="Admittance controller diagram">
+                <figcaption><strong>Admittance controller.</strong> Human-applied forces produce a compliant offset around the robot's equilibrium pose, while stiffness and damping shape how strongly the robot assists or yields.</figcaption>
+            </figure>
+        </section>
+
+        <section class="section teleop" id="teleoperation">
+            <div class="section-heading">
+                <p class="section-kicker">Teleoperation And Data</p>
+                <h2>Demonstrations were collected through teleoperation and compliant following.</h2>
+            </div>
+            <div class="teleop-layout">
+                <figure>
+                    <img src="./assets/images/teleop-factr.jpg" alt="FACTR leader arm and Franka boxlift setup">
+                    <figcaption>FACTR leader arm controls the Franka follower while the boxlift workspace is recorded.</figcaption>
+                </figure>
+                <div class="teleop-copy">
+                    <article>
+                        <h3>FACTR Cartesian Teleoperation</h3>
+                        <p>The FACTR leader arm provides demonstrations by mapping the operator's motion to Cartesian commands for the Franka follower. The stack supports filtering, gravity compensation, optional force feedback, and Robotiq gripper control.</p>
+                    </article>
+                    <article>
+                        <h3>Dataset Recording</h3>
+                        <p>The recorder synchronizes robot motion, interaction forces, camera frames, selected actions, candidate trajectories, goal belief, EFE components, surprise, and timing into dataset samples.</p>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <section class="section experiments" id="experiments">
+            <div class="section-heading">
+                <p class="section-kicker">Experiments</p>
+                <h2>Box lifting, changing goals, continuous stacking, and belief visualization.</h2>
+            </div>
+            <div class="video-tabs" data-video-tabs>
+                <div class="tab-list" role="tablist" aria-label="Experiment videos">
+                    <button type="button" role="tab" aria-selected="true" data-panel="full">Full</button>
+                    <button type="button" role="tab" aria-selected="false" data-panel="goal-change">Goal change</button>
+                    <button type="button" role="tab" aria-selected="false" data-panel="stacking">Stacking</button>
+                    <button type="button" role="tab" aria-selected="false" data-panel="beta">Beta comparison</button>
+                </div>
+                <div class="tab-panels">
+                    <figure class="video-stage tab-panel is-active" data-panel-id="full">
+                        <video controls muted playsinline preload="metadata">
+                            <source src="./assets/videos/full-experiment.mp4" type="video/mp4">
+                            Your browser cannot play this video.
+                        </video>
+                        <figcaption><strong>Full experiment</strong><span>The complete boxlift trial shows the robot assisting the human toward an inferred target.</span></figcaption>
+                    </figure>
+                    <figure class="video-stage tab-panel" data-panel-id="goal-change" hidden>
+                        <video controls muted playsinline preload="metadata">
+                            <source src="./assets/videos/goal-change.mp4" type="video/mp4">
+                            Your browser cannot play this video.
+                        </video>
+                        <figcaption><strong>Changing goal mid-trial</strong><span>The goal posterior changes after the human redirects the box, and the selected policy adapts.</span></figcaption>
+                    </figure>
+                    <figure class="video-stage tab-panel" data-panel-id="stacking" hidden>
+                        <video controls muted playsinline preload="metadata">
+                            <source src="./assets/videos/continuous-stacking.mp4" type="video/mp4">
+                            Your browser cannot play this video.
+                        </video>
+                        <figcaption><strong>Continuous stacking</strong><span>The reset handoff and stacking goal schedule enable multiple boxes to be placed in sequence.</span></figcaption>
+                    </figure>
+                    <div class="tab-panel beta-panel" data-panel-id="beta" hidden>
+                        <div class="comparison-block">
+                            <h3>Latent distribution</h3>
+                            <div class="comparison-grid">
+                                <figure>
+                                    <video controls muted playsinline preload="metadata">
+                                        <source src="./assets/videos/z-distribution-fb2.mp4" type="video/mp4">
+                                        Your browser cannot play this video.
+                                    </video>
+                                    <figcaption><strong>High beta.</strong> The latent distribution is more constrained, producing a more compact candidate set.</figcaption>
+                                </figure>
+                                <figure>
+                                    <video controls muted playsinline preload="metadata">
+                                        <source src="./assets/videos/z-distribution-fb02.mp4" type="video/mp4">
+                                        Your browser cannot play this video.
+                                    </video>
+                                    <figcaption><strong>Low beta.</strong> The latent distribution remains broader, preserving more candidate-policy diversity.</figcaption>
+                                </figure>
+                            </div>
+                        </div>
+
+                        <div class="comparison-block">
+                            <h3>Attention and candidate-action average</h3>
+                            <div class="comparison-grid">
+                                <figure>
+                                    <img src="./assets/results/ca-average-boxlift-fb2.png" alt="Attention and candidate-action average visualization for high beta">
+                                    <figcaption><strong>High beta.</strong> Candidate-action statistics for the higher beta setting.</figcaption>
+                                </figure>
+                                <figure>
+                                    <img src="./assets/results/ca-average-boxlift-fb02.png" alt="Attention and candidate-action average visualization for low beta">
+                                    <figcaption><strong>Low beta.</strong> Candidate-action statistics for the lower beta setting.</figcaption>
+                                </figure>
+                            </div>
+                        </div>
+
+                        <div class="comparison-block">
+                            <h3>3D predicted actions</h3>
+                            <div class="comparison-grid">
+                                <figure>
+                                    <img src="./assets/results/3d-prediction-boxlift-fb2.png" alt="3D predicted actions for high beta">
+                                    <figcaption><strong>High beta.</strong> Predicted action chunks are more concentrated around the dominant behavior.</figcaption>
+                                </figure>
+                                <figure>
+                                    <img src="./assets/results/3d-prediction-boxlift-fb02.png" alt="3D predicted actions for low beta">
+                                    <figcaption><strong>Low beta.</strong> Predicted action chunks keep more spatial variation.</figcaption>
+                                </figure>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="result-grid dense">
+                <figure>
+                    <img src="./assets/result-images/thesis_posterior_force_over_time-01.png" alt="Goal posterior and force over time">
+                    <figcaption>Goal posterior and measured force over time.</figcaption>
+                </figure>
+            </div>
+        </section>
+
+        <section class="section conclusion">
+            <div class="section-heading">
+                <p class="section-kicker">Conclusion</p>
+                <h2>Active inference produced goal-directed assistance with explicit uncertainty handling.</h2>
+            </div>
+            <div class="cards two">
+                <article>
+                    <h3>Findings</h3>
+                    <p>The full active-inference system reduced uncertainty about the human's intended goal more quickly than passive inference and non-planning policy baselines. The explicit goal posterior enabled a confidence-dependent transition: the robot stayed compliant when uncertain and provided stronger goal-directed assistance once the intended goal became clearer.</p>
+                </article>
+                <article>
+                    <h3>Limitations And Future Work</h3>
+                    <p>The benefit of EFE-based selection depends on world-model accuracy, and the experiments were limited to a controlled task with fixed goals and one human operator. Future work should improve dataset coverage, reduce rollout noise, evaluate multiple participants, add visual scene conditioning, study action-chunk length, and replace threshold-based mode switches with continuous coupling through goal entropy and surprise.</p>
+                </article>
+            </div>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <p>Human-Robot Collaborative Object Manipulation Using Deep Active Inference</p>
+        <p>Ferdinand Hartmann · <span id="current-year"></span></p>
+    </footer>
+</body>
+</html>
