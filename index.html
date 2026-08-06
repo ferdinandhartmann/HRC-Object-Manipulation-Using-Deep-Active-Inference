@@ -15,7 +15,7 @@
         <a href="#overview">Overview</a>
         <a href="#method">Method</a>
         <a href="#implementation">Implementation</a>
-        <a href="#teleoperation">Teleoperation</a>
+        <a href="#dataset">Dataset</a>
         <a href="#experiments">Experiments</a>
     </nav>
 
@@ -29,8 +29,7 @@
             <p class="hero-copy">A real-time active-inference system for physical human-robot collaboration with a Franka Research 3 arm. The robot infers human intent, balances following and leading, and selects action chunks for collaborative box lifting and stacking.</p>
             <dl class="hero-meta">
                 <div><dt>Student</dt><dd>Ferdinand Hartmann</dd></div>
-                <div><dt>Supervisor</dt><dd>Shingo Murata</dd></div>
-                <div class="meta-small"><dt>Co-supervisor</dt><dd>Vincent Fremont</dd></div>
+                <div><dt>Supervision</dt><dd>Shingo Murata (Keio University)<br><span>Co-supervisor: Vincent Fremont (EC Nantes)</span></dd></div>
                 <div><dt>Program</dt><dd>Keio University · EC Nantes<br>JEMARO Double Degree Master</dd></div>
             </dl>
         </div>
@@ -78,6 +77,12 @@
                 <p class="section-kicker">Method</p>
                 <h2>Deep active inference over candidate action chunks.</h2>
             </div>
+            <div class="diagram-pair method-overview">
+                <figure>
+                    <img src="./assets/result-images/thesis_diagramms-01.png" alt="Overview of the active inference system">
+                    <figcaption><strong>Method overview.</strong> Observations update the hidden state and goal belief; candidate actions are generated, evaluated, and selected for the real robot.</figcaption>
+                </figure>
+            </div>
             <div class="flow" aria-label="AIF method flow">
                 <article>
                     <span>01</span>
@@ -101,42 +106,94 @@
                 </article>
             </div>
 
-            <div class="belief-demo" data-belief-demo>
-                <div>
+            <div class="belief-demo entropy-demo" data-entropy-demo>
+                <div class="entropy-copy">
                     <p class="section-kicker">Interactive Explainer</p>
                     <h3>Uncertainty controls the role transition.</h3>
-                    <p data-belief-copy>When goal certainty is low, the system values information gain and tends to follow or explore to infer the human's intended goal.</p>
+                    <p>Move from an ambiguous 3-goal posterior to a confident one. Goal entropy drives two sigmoid mappings: Goal IG gain increases under uncertainty, while the boxlift interaction mode shifts from compliant following to goal-directed leading as certainty rises.</p>
                 </div>
-                <div class="belief-controls" role="group" aria-label="Belief state">
-                    <button class="is-selected" type="button" data-belief="uncertain">Low certainty</button>
-                    <button type="button" data-belief="certain">High certainty</button>
-                </div>
-                <div class="belief-panel">
-                    <div class="belief-bars" aria-hidden="true">
-                        <span style="height: 76%"></span>
-                        <span style="height: 52%"></span>
-                        <span style="height: 39%"></span>
-                        <span style="height: 63%"></span>
+                <div class="entropy-controls">
+                    <label for="certainty-slider">Goal certainty</label>
+                    <input id="certainty-slider" type="range" min="0" max="100" value="28" data-certainty-slider>
+                    <div class="entropy-scale" aria-hidden="true">
+                        <span>uncertain</span>
+                        <span>confident</span>
                     </div>
-                    <strong data-belief-mode>Follow / explore</strong>
-                    <small data-belief-detail>Goal information gain dominates the action choice.</small>
                 </div>
-            </div>
-            <div class="method-plots">
-                <figure>
-                    <img src="./assets/result-images/thesis_goal_entropy_goal_ig_v2_3goals-01.png" alt="Sigmoid mapping from goal entropy to goal information-gain weight">
-                    <figcaption><strong>Goal entropy to goal-information-gain weight.</strong> The sigmoid increases epistemic pressure when the goal remains uncertain.</figcaption>
-                </figure>
-                <figure>
-                    <img src="./assets/result-images/thesis_goal_entropy_boxlift_mode_3goals-01.png" alt="Sigmoid mapping from goal entropy to interaction mode">
-                    <figcaption><strong>Goal entropy to interaction mode.</strong> The sigmoid maps uncertainty to the transition between following and leading behavior.</figcaption>
-                </figure>
-            </div>
-            <div class="diagram-pair">
-                <figure>
-                    <img src="./assets/result-images/thesis_diagramms-01.png" alt="Overview of the active inference system">
-                    <figcaption><strong>Method overview.</strong> Observations update the hidden state and goal belief; candidate actions are generated, evaluated, and selected for the real robot.</figcaption>
-                </figure>
+                <div class="entropy-panel">
+                    <div class="posterior-card" aria-label="Goal probabilities">
+                        <div class="posterior-bars">
+                            <span><i data-goal-bar="0"></i><em data-goal-percent="0">43%</em></span>
+                            <span><i data-goal-bar="1"></i><em data-goal-percent="1">31%</em></span>
+                            <span><i data-goal-bar="2"></i><em data-goal-percent="2">26%</em></span>
+                        </div>
+                        <div class="posterior-values">
+                            <strong>Goal posterior</strong>
+                            <span>3-goal belief state</span>
+                        </div>
+                    </div>
+                    <div class="sigmoid-stack">
+                        <div class="sigmoid-row" data-sigmoid-row="goalIg">
+                            <div>
+                                <strong>Goal IG gain</strong>
+                                <span data-goal-ig-value>0.00</span>
+                            </div>
+                            <svg viewBox="0 0 300 92" role="img" aria-label="Goal entropy to Goal IG sigmoid">
+                                <rect class="plot-frame" x="58" y="10" width="222" height="56"></rect>
+                                <line class="plot-axis" x1="58" x2="280" y1="66" y2="66"></line>
+                                <line class="plot-axis" x1="58" x2="58" y1="10" y2="66"></line>
+                                <text class="plot-end-label" x="6" y="14">explore</text>
+                                <text class="plot-one" x="45" y="14">1</text>
+                                <text class="plot-end-label" x="12" y="69">assist</text>
+                                <text class="plot-zero" x="45" y="69">0</text>
+                                <text class="plot-x-label" x="154" y="86">goal entropy</text>
+                                <text class="plot-y-label" x="-49" y="38" transform="rotate(-90)">gain</text>
+                                <path data-curve="goalIg" d=""></path>
+                                <line data-marker="goalIg" x1="0" x2="0" y1="10" y2="66"></line>
+                            </svg>
+                        </div>
+                        <div class="sigmoid-row" data-sigmoid-row="mode">
+                            <div>
+                                <strong>Following / leading</strong>
+                                <span data-mode-value>0.00</span>
+                            </div>
+                            <svg viewBox="0 0 300 92" role="img" aria-label="Goal entropy to boxlift interaction mode sigmoid">
+                                <rect class="plot-frame" x="58" y="10" width="222" height="56"></rect>
+                                <line class="plot-axis" x1="58" x2="280" y1="66" y2="66"></line>
+                                <line class="plot-axis" x1="58" x2="58" y1="10" y2="66"></line>
+                                <text class="plot-end-label" x="21" y="14">lead</text>
+                                <text class="plot-one" x="45" y="14">1</text>
+                                <text class="plot-end-label" x="12" y="69">follow</text>
+                                <text class="plot-zero" x="45" y="69">0</text>
+                                <text class="plot-x-label" x="154" y="86">goal entropy</text>
+                                <text class="plot-y-label" x="-52" y="38" transform="rotate(-90)">mode</text>
+                                <path data-curve="mode" d=""></path>
+                                <line data-marker="mode" x1="0" x2="0" y1="10" y2="66"></line>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="mode-readout">
+                        <div class="balance-row">
+                            <div class="balance-labels">
+                                <span>Assist</span>
+                                <span>Explore</span>
+                            </div>
+                            <div class="balance-track" aria-label="Assist to explore balance">
+                                <i data-goal-ig-balance></i>
+                            </div>
+                        </div>
+                        <div class="balance-row">
+                            <div class="balance-labels">
+                                <span>Follow</span>
+                                <span>Lead</span>
+                            </div>
+                            <div class="balance-track" aria-label="Follow to lead balance">
+                                <i data-mode-balance></i>
+                            </div>
+                        </div>
+                        <small><span data-entropy-value>0.00</span> entropy</small>
+                    </div>
+                </div>
             </div>
             <div class="model-diagrams">
                 <figure>
@@ -215,27 +272,30 @@
             </figure>
         </section>
 
-        <section class="section teleop" id="teleoperation">
+        <section class="section teleop" id="dataset">
             <div class="section-heading">
-                <p class="section-kicker">Teleoperation And Data</p>
-                <h2>Demonstrations were collected through teleoperation and compliant following.</h2>
+                <p class="section-kicker">Dataset</p>
+                <h2>Demonstrations were collected through leading teleoperation and compliant following.</h2>
             </div>
-            <div class="teleop-layout">
-                <figure>
-                    <img src="./assets/images/teleop-factr.jpg" alt="FACTR leader arm and Franka boxlift setup">
-                    <figcaption>FACTR leader arm controls the Franka follower while the boxlift workspace is recorded.</figcaption>
-                </figure>
-                <div class="teleop-copy">
-                    <article>
-                        <h3>FACTR Cartesian Teleoperation</h3>
-                        <p>The FACTR leader arm provides demonstrations by mapping the operator's motion to Cartesian commands for the Franka follower. The stack supports filtering, gravity compensation, optional force feedback, and Robotiq gripper control.</p>
-                    </article>
-                    <article>
-                        <h3>Dataset Recording</h3>
-                        <p>The recorder synchronizes robot motion, interaction forces, camera frames, selected actions, candidate trajectories, goal belief, EFE components, surprise, and timing into dataset samples.</p>
-                    </article>
+            <div class="teleop-layout paired-data">
+                <article>
+                    <h3>Leading Demonstrations</h3>
+                    <figure>
+                        <img src="./assets/images/teleop-factr.jpg" alt="FACTR leader arm and Franka boxlift setup">
+                        <figcaption>FACTR Cartesian teleoperation maps the leader arm motion to Franka follower commands for goal-directed boxlift demonstrations.</figcaption>
+                    </figure>
+                </article>
+                <article>
+                    <h3>Following Demonstrations</h3>
+                    <p>Following data was collected with the Cartesian admittance controller. Human-applied forces moved the compliant robot around its equilibrium pose while the recorder stored synchronized robot state, wrench, camera frames, selected actions, goal belief, EFE components, surprise, and timing.</p>
+                </article>
+            </div>
+            <figure class="wide-figure data-overview-figure">
+                <div class="top-crop-image">
+                    <img src="./assets/result-images/all-3d-ee-pose.png" alt="All episodes 3D end-effector pose dataset overview">
                 </div>
-            </div>
+                <figcaption><strong>Whole dataset 3D end-effector pose.</strong> Measured trajectories across all recorded episodes show the spatial coverage of the collaborative manipulation dataset.</figcaption>
+            </figure>
         </section>
 
         <section class="section experiments" id="experiments">
@@ -244,11 +304,12 @@
                 <h2>Box lifting, changing goals, continuous stacking, and belief visualization.</h2>
             </div>
             <div class="video-tabs" data-video-tabs>
-                <div class="tab-list" role="tablist" aria-label="Experiment videos">
+                <div class="tab-list" role="tablist" aria-label="Experiment views">
                     <button type="button" role="tab" aria-selected="true" data-panel="full">Full</button>
                     <button type="button" role="tab" aria-selected="false" data-panel="goal-change">Goal change</button>
                     <button type="button" role="tab" aria-selected="false" data-panel="stacking">Stacking</button>
-                    <button type="button" role="tab" aria-selected="false" data-panel="beta">Beta comparison</button>
+                    <button type="button" role="tab" aria-selected="false" data-panel="beta">Policy Model insights</button>
+                    <button type="button" role="tab" aria-selected="false" data-panel="world-model">World model insights</button>
                 </div>
                 <div class="tab-panels">
                     <figure class="video-stage tab-panel is-active" data-panel-id="full">
@@ -275,53 +336,74 @@
                     <div class="tab-panel beta-panel" data-panel-id="beta" hidden>
                         <div class="comparison-block">
                             <h3>Latent distribution</h3>
-                            <div class="comparison-grid">
-                                <figure>
-                                    <video controls muted playsinline preload="metadata">
-                                        <source src="./assets/videos/z-distribution-fb2.mp4" type="video/mp4">
-                                        Your browser cannot play this video.
-                                    </video>
-                                    <figcaption><strong>High beta.</strong> The latent distribution is more constrained, producing a more compact candidate set.</figcaption>
-                                </figure>
-                                <figure>
-                                    <video controls muted playsinline preload="metadata">
-                                        <source src="./assets/videos/z-distribution-fb02.mp4" type="video/mp4">
-                                        Your browser cannot play this video.
-                                    </video>
-                                    <figcaption><strong>Low beta.</strong> The latent distribution remains broader, preserving more candidate-policy diversity.</figcaption>
-                                </figure>
-                            </div>
+                            <figure class="wide-video">
+                                <video controls muted playsinline preload="metadata">
+                                    <source src="./assets/videos/beta-latent-comparison.mp4" type="video/mp4">
+                                    Your browser cannot play this video.
+                                </video>
+                                <figcaption><strong>High beta left, low beta right.</strong> Higher beta constrains the latent distribution, while lower beta preserves broader candidate-policy diversity.</figcaption>
+                            </figure>
                         </div>
 
                         <div class="comparison-block">
                             <h3>Attention and candidate-action average</h3>
-                            <div class="comparison-grid">
-                                <figure>
+                            <figure class="paired-figure">
+                                <div class="paired-media">
+                                    <div>
                                     <img src="./assets/results/ca-average-boxlift-fb2.png" alt="Attention and candidate-action average visualization for high beta">
                                     <figcaption><strong>High beta.</strong> Candidate-action statistics for the higher beta setting.</figcaption>
-                                </figure>
-                                <figure>
+                                    </div>
+                                    <div>
                                     <img src="./assets/results/ca-average-boxlift-fb02.png" alt="Attention and candidate-action average visualization for low beta">
                                     <figcaption><strong>Low beta.</strong> Candidate-action statistics for the lower beta setting.</figcaption>
-                                </figure>
-                            </div>
+                                    </div>
+                                </div>
+                            </figure>
                         </div>
 
                         <div class="comparison-block">
                             <h3>3D predicted actions</h3>
-                            <div class="comparison-grid">
-                                <figure>
+                            <figure class="paired-figure">
+                                <div class="paired-media">
+                                    <div>
                                     <img src="./assets/results/3d-prediction-boxlift-fb2.png" alt="3D predicted actions for high beta">
                                     <figcaption><strong>High beta.</strong> Predicted action chunks are more concentrated around the dominant behavior.</figcaption>
-                                </figure>
-                                <figure>
+                                    </div>
+                                    <div>
                                     <img src="./assets/results/3d-prediction-boxlift-fb02.png" alt="3D predicted actions for low beta">
                                     <figcaption><strong>Low beta.</strong> Predicted action chunks keep more spatial variation.</figcaption>
+                                    </div>
+                                </div>
+                            </figure>
+                        </div>
+                    </div>
+                    <div class="tab-panel world-model-panel" data-panel-id="world-model" hidden>
+                        <div class="comparison-block">
+                            <h3>World model insights</h3>
+                            <div class="insight-stack">
+                                <figure class="wide-figure">
+                                    <img src="./assets/result-images/thesis_rollout_recon_vs_true.png" alt="World-model rollout reconstructions compared against observed signals">
+                                    <figcaption><strong>World-model rollout reconstruction.</strong> Selected-policy rollouts are compared against observed motion, rotation, velocity, and force signals.</figcaption>
+                                </figure>
+                                <figure class="wide-figure">
+                                    <img src="./assets/result-images/efe_over_time_thesis.png" alt="Expected free energy, posterior, interaction mode, surprise, and wrench over time">
+                                    <figcaption><strong>EFE and interaction trace.</strong> Goal posterior, interaction mode, distance to goals, expected free energy components, surprise, and external wrench are shown over one representative trial.</figcaption>
                                 </figure>
                             </div>
                         </div>
                     </div>
                 </div>
+            </div>
+            <div class="comparison-block">
+                <h3>Quantitative results</h3>
+                <figure class="wide-figure">
+                    <img src="./assets/result-images/thesis_outcome_comparison.png" alt="Comparison of success rate, episode duration, and final distance to goal for AIF and baselines">
+                    <figcaption><strong>Task outcome comparison.</strong> AIF is compared against passive-value selection without information gain and a policy-model baseline with goal posterior inference.</figcaption>
+                </figure>
+                <figure class="wide-figure">
+                    <img src="./assets/result-images/thesis_inference_interaction_comparison.png" alt="Comparison of correct-goal posterior and leading behavior for AIF and baselines">
+                    <figcaption><strong>Inference and interaction comparison.</strong> The plot compares correct-goal posterior, final posterior, leading behavior, and correctness while leading.</figcaption>
+                </figure>
             </div>
             <div class="result-grid dense">
                 <figure>
