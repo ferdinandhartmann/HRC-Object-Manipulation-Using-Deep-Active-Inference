@@ -229,10 +229,14 @@ code {
     text-transform: uppercase;
 }
 
+.eyebrow {
+    font-size: 0.9rem;
+}
+
 h1 {
     max-width: 900px;
     margin-top: 14px;
-    font-size: clamp(2.55rem, 7vw, 6.1rem);
+    font-size: clamp(2.35rem, 5.9vw, 5.35rem);
     font-weight: 820;
     letter-spacing: 0;
 }
@@ -241,7 +245,7 @@ h1 {
     max-width: 760px;
     margin-top: 24px;
     color: #e6edf6;
-    font-size: clamp(1.05rem, 2.2vw, 1.35rem);
+    font-size: clamp(1.12rem, 2.25vw, 1.45rem);
 }
 
 .hero-meta {
@@ -262,7 +266,7 @@ h1 {
 
 .hero-meta dt {
     color: #bfd6db;
-    font-size: 0.74rem;
+    font-size: 0.82rem;
     font-weight: 800;
     text-transform: uppercase;
 }
@@ -270,12 +274,13 @@ h1 {
 .hero-meta dd {
     margin: 4px 0 0;
     color: white;
+    font-size: 1.06rem;
     line-height: 1.3;
 }
 
 .hero-meta dd span {
     color: #d5e3e8;
-    font-size: 0.92rem;
+    font-size: 0.98rem;
 }
 
 .section {
@@ -393,7 +398,7 @@ figcaption {
 
 .belief-demo {
     display: grid;
-    grid-template-columns: minmax(0, 0.82fr) minmax(240px, 0.42fr) minmax(460px, 1.18fr);
+    grid-template-columns: minmax(0, 1fr) minmax(240px, 0.42fr);
     gap: 26px;
     align-items: center;
     margin-top: 22px;
@@ -487,6 +492,7 @@ figcaption {
 }
 
 .entropy-panel {
+    grid-column: 1 / -1;
     display: grid;
     grid-template-columns: 150px minmax(0, 1fr);
     gap: 18px;
@@ -576,8 +582,8 @@ figcaption {
 
 .sigmoid-row {
     display: grid;
-    grid-template-columns: 118px minmax(0, 1fr);
-    gap: 14px;
+    grid-template-columns: 132px minmax(0, 1fr);
+    gap: 18px;
     align-items: center;
     min-width: 0;
 }
@@ -602,7 +608,7 @@ figcaption {
     display: block;
     width: 100%;
     min-width: 0;
-    height: 92px;
+    height: auto;
     overflow: visible;
 }
 
@@ -726,6 +732,8 @@ figcaption {
 }
 
 .method-overview {
+    grid-template-columns: minmax(0, 980px);
+    justify-content: center;
     margin-bottom: 22px;
 }
 
@@ -906,16 +914,15 @@ figcaption {
 }
 
 .vertical-crop-image {
-    height: 320px;
+    aspect-ratio: 1333 / 1600;
     overflow: hidden;
 }
 
 .teleop-layout.paired-data .vertical-crop-image img {
     width: 100%;
-    height: 125%;
+    height: auto;
     max-width: none;
     transform: translateY(-10%);
-    object-fit: cover;
 }
 
 .data-overview-figure {
@@ -973,6 +980,15 @@ figcaption {
 
 .result-grid {
     margin-top: 24px;
+}
+
+.centered-result-grid {
+    display: block;
+}
+
+.compact-result-figure {
+    width: 70%;
+    margin: 22px auto 0;
 }
 
 .comparison-block {
@@ -1085,7 +1101,11 @@ figcaption {
     }
 
     .sigmoid-row svg {
-        height: 112px;
+        height: auto;
+    }
+
+    .compact-result-figure {
+        width: 100%;
     }
 }
 
