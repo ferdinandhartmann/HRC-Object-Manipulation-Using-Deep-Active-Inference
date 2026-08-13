@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="Master thesis project website for Human-Robot Collaborative Object Manipulation Using Deep Active Inference by Ferdinand Hartmann.">
     <title>Human-Robot Collaborative Object Manipulation Using Deep Active Inference</title>
-    <link rel="stylesheet" href="./styles.css?v=20260806-5">
-    <script src="./script.js?v=20260806-5" defer></script>
+    <link rel="stylesheet" href="./styles.css?v=20260813-23">
+    <script src="./script.js?v=20260813-3" defer></script>
 </head>
 <body>
     <a class="skip-link" href="#main-content">Skip to main content</a>
@@ -17,6 +17,7 @@
         <a href="#implementation">Implementation</a>
         <a href="#dataset">Dataset</a>
         <a href="#experiments">Experiments</a>
+        <a href="#conclusion">Conclusion</a>
     </nav>
 
     <header class="hero" id="overview">
@@ -25,7 +26,7 @@
         </div>
         <div class="hero-content">
             <p class="eyebrow">Master Thesis Project</p>
-            <h1>Human-Robot Collaborative Object Manipulation Using Deep Active Inference</h1>
+            <h1>Human-Robot Collaborative Object Manipulation with Deep Active Inference</h1>
             <p class="hero-copy">A real-time active-inference system for physical human-robot collaboration with a Franka Research 3 arm. The robot infers human intent, balances following and leading, and selects action chunks for collaborative box lifting and stacking.</p>
             <dl class="hero-meta">
                 <div><dt>Student</dt><dd>Ferdinand Hartmann</dd></div>
@@ -39,12 +40,12 @@
         <section class="section intro-section">
             <div class="section-heading">
                 <p class="section-kicker">Why It Matters</p>
-                <h2>Collaborative manipulation needs more than reactive compliance.</h2>
+                <h2>Overview</h2>
             </div>
             <div class="intro-grid">
                 <article>
                     <h3>Problem</h3>
-                    <p>Physical human-robot collaboration combines human adaptability with robotic precision and strength. In shared object manipulation, the human's intended goal is often only partially visible from motion and contact forces.</p>
+                    <p>In physical collaborative manipulation, the human's goal is only partially observable. Early motions can match several targets, intentions may change, and contact forces carry both safety-critical feedback and evidence about where the human wants to move.</p>
                 </article>
                 <article>
                     <h3>Core Idea</h3>
@@ -52,7 +53,7 @@
                 </article>
                 <article>
                     <h3>Contribution</h3>
-                    <p>ACT is used as a fast stochastic proposal model for active inference, generating diverse short-horizon action chunks that can be ranked by expected free energy in real time.</p>
+                    <p>This thesis integrates an ACT candidate-policy model, a learned world model, and a categorical goal posterior into a real-time deep AIF system. Candidate action chunks are selected by balancing task progress with expected information gain about the human's intended goal.</p>
                 </article>
             </div>
             <article class="abstract-card">
@@ -64,7 +65,7 @@
         <section class="section media-feature" aria-label="Featured experiment video">
             <div class="section-heading compact">
                 <p class="section-kicker">Result In Motion</p>
-                <h2>Full box-lift experiment</h2>
+                <h2>Full Box-Lift Experiment</h2>
             </div>
             <video controls muted playsinline preload="metadata">
                 <source src="./assets/videos/full-experiment.mp4" type="video/mp4">
@@ -75,12 +76,12 @@
         <section class="section" id="method">
             <div class="section-heading">
                 <p class="section-kicker">Method</p>
-                <h2>Deep active inference over candidate action chunks.</h2>
+                <h2>Method</h2>
             </div>
             <div class="diagram-pair method-overview">
                 <figure>
                     <img src="./assets/result-images/thesis_diagramms-01.png" alt="Overview of the active inference system">
-                    <figcaption><strong>Method overview.</strong> Observations update the hidden state and goal belief; candidate actions are generated, evaluated, and selected for the real robot.</figcaption>
+                    <figcaption><strong>AIF loop.</strong> Observations update the hidden state and goal belief; candidate actions are generated, evaluated, and selected for the real robot.</figcaption>
                 </figure>
             </div>
             <div class="flow" aria-label="AIF method flow">
@@ -109,11 +110,11 @@
             <div class="belief-demo entropy-demo" data-entropy-demo>
                 <div class="entropy-copy">
                     <p class="section-kicker">Interactive Explainer</p>
-                    <h3>Uncertainty controls the role transition.</h3>
-                    <p>Move from an ambiguous 3-goal posterior to a confident one. Goal entropy drives two sigmoid mappings: Goal IG gain increases under uncertainty, while the boxlift interaction mode shifts from compliant following to goal-directed leading as certainty rises.</p>
+                    <h3>Certainty changes the role.</h3>
+                    <p>Move from an ambiguous 3-goal posterior to a confident one. Goal entropy maps the robot from exploration and compliant following toward assistance and leading.</p>
                 </div>
                 <div class="entropy-controls">
-                    <label for="certainty-slider">Goal certainty</label>
+                    <label for="certainty-slider">Goal certainty <span>drag to adjust</span></label>
                     <input id="certainty-slider" type="range" min="0" max="100" value="28" data-certainty-slider>
                     <div class="entropy-scale" aria-hidden="true">
                         <span>uncertain</span>
@@ -129,13 +130,12 @@
                         </div>
                         <div class="posterior-values">
                             <strong>Goal posterior</strong>
-                            <span>3-goal belief state</span>
                         </div>
                     </div>
                     <div class="sigmoid-stack">
                         <div class="sigmoid-row" data-sigmoid-row="goalIg">
                             <div>
-                                <strong>Goal IG gain</strong>
+                                <strong>Goal IG</strong>
                                 <span data-goal-ig-value>0.00</span>
                             </div>
                             <svg viewBox="0 0 300 92" role="img" aria-label="Goal entropy to Goal IG sigmoid">
@@ -198,15 +198,15 @@
             <div class="model-diagrams">
                 <figure>
                     <img src="./assets/diagram-images/act_diagramm-01.png" alt="ACT-based policy model diagram">
-                    <figcaption><strong>Policy model.</strong> The ACT-based model creates diverse, temporally coherent candidate action chunks for the robot.</figcaption>
+                    <figcaption><strong>Policy.</strong> The ACT-based model creates diverse, temporally coherent candidate action chunks for the robot.</figcaption>
                 </figure>
                 <figure>
                     <img src="./assets/diagram-images/wm_update_diagramm-01.png" alt="World model update diagram">
-                    <figcaption><strong>World-model update.</strong> New observations are used to keep the internal model aligned with the real interaction.</figcaption>
+                    <figcaption><strong>Update.</strong> New observations are used to keep the internal model aligned with the real interaction.</figcaption>
                 </figure>
                 <figure>
                     <img src="./assets/diagram-images/wm_planning_diagramm-01.png" alt="World model planning diagram">
-                    <figcaption><strong>World-model planning.</strong> Candidate futures are evaluated with pragmatic value, state information gain, and goal information gain.</figcaption>
+                    <figcaption><strong>Planning.</strong> Candidate futures are evaluated with pragmatic value, state information gain, and goal information gain.</figcaption>
                 </figure>
             </div>
         </section>
@@ -214,7 +214,13 @@
         <section class="section implementation" id="implementation">
             <div class="section-heading">
                 <p class="section-kicker">Implementation</p>
-                <h2>The real-time robot system separates action generation from action evaluation.</h2>
+                <h2>Implementation</h2>
+            </div>
+            <div class="facts implementation-facts">
+                <div><strong>30 Hz</strong><span>world-model update and observation recording</span></div>
+                <div><strong>3 Hz</strong><span>planning cadence through 10-step action chunks</span></div>
+                <div><strong>9 goals</strong><span>physical boxlift positions for goal inference and stacking</span></div>
+                <div><strong>300 Hz</strong><span>smooth Cartesian command execution on the robot</span></div>
             </div>
             <div class="system-map">
                 <button type="button" class="system-node is-active" data-system="gpu">GPU AIF</button>
@@ -232,78 +238,53 @@
                     <li>The system records selected trajectories, candidate samples, goal belief, EFE metrics, surprise, and timing diagnostics for later analysis.</li>
                 </ul>
             </article>
-
-            <div class="implementation-grid">
-                <figure class="no-crop-figure">
-                    <img src="./assets/images/realtime-inference.png" alt="Real-time inference architecture diagram">
-                    <figcaption>Real-time inference architecture used to connect policy prediction, world-model update, action execution, and visualization.</figcaption>
-                </figure>
-                <div class="facts">
-                    <div><strong>30 Hz</strong><span>world-model update and observation recording</span></div>
-                    <div><strong>3 Hz</strong><span>planning cadence through 10-step action chunks</span></div>
-                    <div><strong>9 goals</strong><span>physical boxlift positions for goal inference and stacking</span></div>
-                    <div><strong>300 Hz</strong><span>smooth Cartesian command execution on the robot</span></div>
-                </div>
-            </div>
-        </section>
-
-        <section class="section controllers-section">
-            <div class="section-heading">
-                <p class="section-kicker">Control Layer</p>
-                <h2>Custom Franka controllers turn selected actions into compliant robot motion.</h2>
-            </div>
-            <div class="cards three">
-                <article>
-                    <h3>Cartesian Impedance</h3>
-                    <p>Tracks selected end-effector pose commands with stiffness, damping, torque limits, wrench limits, startup protection, and first-command smoothing.</p>
-                </article>
-                <article>
-                    <h3>Cartesian Admittance</h3>
-                    <p>Converts measured external wrench into compliant motion. This supports human-following behavior and can receive equilibrium and gain commands for variable-stiffness AIF experiments.</p>
-                </article>
-                <article>
-                    <h3>Trajectory Handoff</h3>
-                    <p>The execution layer interpolates selected action chunks, keeps commands inside the workspace, handles stale predictions, and coordinates finish/reset behavior between trials.</p>
-                </article>
-            </div>
-            <figure class="wide-figure">
-                <img src="./assets/diagram-images/admittance_diagramm-01.png" alt="Admittance controller diagram">
-                <figcaption><strong>Admittance controller.</strong> Human-applied forces produce a compliant offset around the robot's equilibrium pose, while stiffness and damping shape how strongly the robot assists or yields.</figcaption>
-            </figure>
         </section>
 
         <section class="section teleop" id="dataset">
             <div class="section-heading">
                 <p class="section-kicker">Dataset</p>
-                <h2>Demonstrations were collected through leading teleoperation and compliant following.</h2>
+                <h2>Dataset</h2>
             </div>
             <div class="teleop-layout paired-data">
-                <article>
-                    <h3>Leading Demonstrations</h3>
-                    <figure>
-                        <div class="vertical-crop-image">
-                            <img src="./assets/images/teleop-factr.jpg" alt="FACTR leader arm and Franka boxlift setup">
-                        </div>
-                        <figcaption>Cartesian teleoperation based on <a href="https://github.com/JasonJZLiu/FACTR_Hardware">FACTR</a> maps the leader arm motion to Franka follower commands for goal-directed boxlift demonstrations.</figcaption>
-                    </figure>
-                </article>
-                <article>
-                    <h3>Following Demonstrations</h3>
-                    <p>Following data was collected with the Cartesian admittance controller. Human-applied forces moved the compliant robot around its equilibrium pose while the recorder stored synchronized robot state, wrench, camera frames, selected actions, goal belief, EFE components, surprise, and timing.</p>
-                </article>
-            </div>
-            <figure class="wide-figure data-overview-figure">
-                <div class="top-crop-image">
-                    <img src="./assets/result-images/all-3d-ee-pose.png" alt="All episodes 3D end-effector pose dataset overview">
+                <div class="dataset-column">
+                    <article class="leading-demo-card">
+                        <h3>Leading Demonstrations</h3>
+                        <figure>
+                            <div class="vertical-crop-image">
+                                <img src="./assets/images/teleop-factr.jpg" alt="FACTR leader arm and Franka boxlift setup">
+                            </div>
+                            <figcaption>Cartesian teleoperation based on <a href="https://github.com/JasonJZLiu/FACTR_Hardware">FACTR</a> maps the leader arm motion to Franka follower commands for goal-directed boxlift demonstrations.</figcaption>
+                        </figure>
+                    </article>
+                    <article class="following-demo-card">
+                        <h3>Following Demonstrations</h3>
+                        <p>Following data was collected with the Cartesian admittance controller. Human-applied forces moved the compliant robot around its equilibrium pose while the recorder stored synchronized robot state, wrench, camera frames, selected actions, goal belief, EFE components, surprise, and timing.</p>
+                    </article>
                 </div>
-                <figcaption><strong>Whole dataset 3D end-effector pose.</strong> Measured trajectories across all recorded episodes show the spatial coverage of the collaborative manipulation dataset.</figcaption>
-            </figure>
+                <div class="dataset-column">
+                    <article class="dataset-signals-card">
+                        <h3>Recorded Observations</h3>
+                        <div class="dataset-signal-grid" aria-label="Recorded dataset signals">
+                            <span>EE pose</span>
+                            <span>EE vel</span>
+                            <span>EE wrench</span>
+                            <span>Commanded EE pose</span>
+                        </div>
+                    </article>
+                    <figure class="wide-figure data-overview-figure">
+                        <div class="top-crop-image">
+                            <img src="./assets/result-images/all-3d-ee-pose.png" alt="All episodes 3D end-effector pose dataset overview">
+                        </div>
+                        <figcaption>3D end-effector position plot of the whole dataset.</figcaption>
+                    </figure>
+                </div>
+            </div>
         </section>
 
         <section class="section experiments" id="experiments">
             <div class="section-heading">
                 <p class="section-kicker">Experiments</p>
-                <h2>Box lifting, changing goals, continuous stacking, and belief visualization.</h2>
+                <h2>Experiments</h2>
             </div>
             <div class="video-tabs" data-video-tabs>
                 <div class="tab-list" role="tablist" aria-label="Experiment views">
@@ -413,12 +394,35 @@
                     <figcaption>Goal posterior and measured force over time.</figcaption>
                 </figure>
             </div>
+            <div class="comparison-block">
+                <h3>Ablation</h3>
+                <div class="ablation-card">
+                    <div class="ablation-copy">
+                        <article>
+                            <h3>Alternative Control</h3>
+                            <p>An admittance controller was inserted before the impedance controller to improve force-contact behavior. This created a cascaded controller that converted measured human force into compliant equilibrium-pose updates for the impedance layer.</p>
+                        </article>
+                        <article>
+                            <h3>Reduced Planning Frequency</h3>
+                            <p>The planning cadence was reduced from 3 Hz to 1 Hz to test how slower active-inference updates affect assistance and goal adaptation.</p>
+                        </article>
+                        <article>
+                            <h3>Adaptive Stiffness Control</h3>
+                            <p>The admittance controller stiffness was adjusted based on the interaction mode, allowing the robot to yield more during following and assist more strongly during leading.</p>
+                        </article>
+                    </div>
+                    <figure class="wide-figure ablation-figure">
+                        <img src="./assets/diagram-images/admittance_diagramm-01.png" alt="Admittance controller diagram">
+                        <figcaption><strong>Admittance controller.</strong> Human-applied forces produce a compliant offset around the robot's equilibrium pose, while stiffness and damping shape how strongly the robot assists or yields.</figcaption>
+                    </figure>
+                </div>
+            </div>
         </section>
 
-        <section class="section conclusion">
+        <section class="section conclusion" id="conclusion">
             <div class="section-heading">
                 <p class="section-kicker">Conclusion</p>
-                <h2>Active inference produced goal-directed assistance with explicit uncertainty handling.</h2>
+                <h2>Conclusion</h2>
             </div>
             <div class="cards two">
                 <article>
@@ -430,6 +434,14 @@
                     <p>The benefit of EFE-based selection depends on world-model accuracy, and the experiments were limited to a controlled task with fixed goals and one human operator. Future work should improve dataset coverage, reduce rollout noise, evaluate multiple participants, add visual scene conditioning, study action-chunk length, and replace threshold-based mode switches with continuous coupling through goal entropy and surprise.</p>
                 </article>
             </div>
+        </section>
+
+        <section class="section acknowledgments" id="acknowledgments">
+            <div class="section-heading compact">
+                <p class="section-kicker">Acknowledgments</p>
+                <h2>Acknowledgments</h2>
+            </div>
+            <p>I am grateful to Gabe W. Haddon-Hill for his support during this work.</p>
         </section>
     </main>
 

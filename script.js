@@ -96,7 +96,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const markerX = plot.left + (entropy / maxEntropy) * plot.width;
 
             bars.forEach((bar, index) => {
-                bar.style.height = `${probabilities[index] * 90}px`;
+                bar.style.height = `${probabilities[index] * 62}px`;
             });
 
             percentages.forEach((percentage, index) => {
@@ -127,7 +127,12 @@ document.addEventListener('DOMContentLoaded', () => {
         controller: {
             title: 'Execution layer',
             body: 'The execution layer turns selected action chunks into smooth robot motion. It interpolates the chosen trajectory, keeps motion inside the usable workspace, and coordinates safe stopping or reset behavior.',
-            bullets: ['Smooths short-horizon action chunks before they reach the robot.', 'Handles stale predictions and trial-end behavior.', 'Supports both stiff goal-directed assistance and more compliant interaction.']
+            bullets: ['Smooths short-horizon action chunks before they reach the robot.', 'Handles stale predictions and trial-end behavior.', 'Supports both stiff goal-directed assistance and more compliant interaction.'],
+            figure: {
+                src: './assets/images/realtime-inference.png',
+                alt: 'Real-time inference architecture diagram',
+                caption: 'Real-time inference architecture used to connect policy prediction, world-model update, action execution, and visualization.'
+            }
         },
         path: {
             title: 'Startup and handoff',
@@ -136,13 +141,14 @@ document.addEventListener('DOMContentLoaded', () => {
         },
         franka: {
             title: 'Low-level Franka control',
-            body: 'The low-level controller stack tracks Cartesian pose commands while preserving compliant behavior. Impedance control provides accurate pose tracking; admittance control turns human-applied forces into yielding motion.',
-            bullets: ['Cartesian impedance tracks pose commands with stiffness, damping, torque limits, and first-command smoothing.', 'Cartesian admittance maps external wrench into compliant motion.', 'Controller-side limits and startup ramps reduce abrupt command changes.']
+            body: 'The low-level controller stack turns selected actions into compliant robot motion. Impedance control tracks commanded end-effector poses, while admittance control converts human-applied force into yielding motion around the equilibrium pose.',
+            bullets: ['Cartesian impedance tracks selected pose commands with stiffness, damping, torque limits, wrench limits, startup protection, and first-command smoothing.', 'Cartesian admittance maps measured external wrench into compliant motion and supports human-following behavior.', 'Controller-side limits and startup ramps reduce abrupt command changes.']
         },
         viz: {
             title: 'Visualization and recording',
             body: 'Visualization and recording make the behavior inspectable after each trial. The system stores what the robot believed, what it considered, what it selected, and how the interaction forces evolved.',
-            bullets: ['Goal markers show the most likely target and completed stacking boxes.', 'Candidate and selected trajectories are drawn as RViz marker paths.', 'Recorder stores synchronized robot state, wrench, images, predictions, EFE metrics, posterior, and timing.']
+            bullets: ['Goal markers show the most likely target and completed stacking boxes.', 'Candidate and selected trajectories are drawn as RViz marker paths.', 'Recorder stores synchronized robot state, wrench, images, predictions, EFE metrics, posterior, and timing.'],
+            placeholder: 'visualization'
         }
     };
 
@@ -158,6 +164,37 @@ document.addEventListener('DOMContentLoaded', () => {
                 <h3>${content.title}</h3>
                 <p>${content.body}</p>
                 <ul>${content.bullets.map((item) => `<li>${item}</li>`).join('')}</ul>
+                ${content.figure ? `
+                    <figure class="wide-figure no-crop-figure system-figure">
+                        <img src="${content.figure.src}" alt="${content.figure.alt}">
+                        <figcaption>${content.figure.caption}</figcaption>
+                    </figure>
+                ` : ''}
+                ${content.placeholder === 'visualization' ? `
+                    <figure class="visualization-placeholder system-figure" aria-label="Placeholder for RViz live visualization and PlotJuggler screenshot">
+                        <div class="viz-placeholder-grid">
+                            <div class="rviz-placeholder">
+                                <div class="viz-toolbar"><span></span><span></span><span></span></div>
+                                <div class="rviz-stage">
+                                    <i class="rviz-robot"></i>
+                                    <i class="rviz-path path-a"></i>
+                                    <i class="rviz-path path-b"></i>
+                                    <i class="rviz-goal goal-a"></i>
+                                    <i class="rviz-goal goal-b"></i>
+                                </div>
+                                <strong>RViz live visualization</strong>
+                            </div>
+                            <div class="plotjuggler-placeholder">
+                                <div class="viz-toolbar"><span></span><span></span><span></span></div>
+                                <div class="plot-lines">
+                                    <i></i><i></i><i></i><i></i>
+                                </div>
+                                <strong>PlotJuggler</strong>
+                            </div>
+                        </div>
+                        <figcaption><strong>Visualization placeholder.</strong> Add the final screenshot here showing RViz live markers and PlotJuggler signal traces.</figcaption>
+                    </figure>
+                ` : ''}
             `;
         });
     });

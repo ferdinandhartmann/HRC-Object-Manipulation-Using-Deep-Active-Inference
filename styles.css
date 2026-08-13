@@ -155,22 +155,27 @@ code {
 }
 
 .site-nav {
-    position: sticky;
-    top: 0;
+    position: fixed;
+    top: 50%;
+    left: max(10px, calc((100vw - var(--shell)) / 2 - 184px));
+    transform: translateY(-50%);
     z-index: 50;
     display: flex;
-    gap: 4px;
-    justify-content: center;
-    padding: 10px;
-    border-bottom: 1px solid rgba(17, 24, 39, 0.1);
-    background: rgba(247, 248, 251, 0.92);
+    flex-direction: column;
+    gap: 6px;
+    width: 146px;
+    padding: 8px;
+    border: 1px solid rgba(17, 24, 39, 0.06);
+    border-radius: 8px;
+    background: rgba(247, 248, 251, 0.64);
     backdrop-filter: blur(16px);
+    box-shadow: 0 8px 22px rgba(22, 32, 52, 0.06);
 }
 
 .site-nav a {
-    padding: 7px 12px;
+    padding: 8px 10px;
     border-radius: 6px;
-    color: #536071;
+    color: rgba(83, 96, 113, 0.78);
     font-size: 0.86rem;
     font-weight: 700;
     text-decoration: none;
@@ -186,7 +191,7 @@ code {
     position: relative;
     min-height: 92vh;
     display: grid;
-    align-items: end;
+    align-items: center;
     overflow: hidden;
     background: #101723;
 }
@@ -216,17 +221,22 @@ code {
     z-index: 1;
     width: min(calc(100% - 40px), var(--shell));
     margin: 0 auto;
-    padding: 0 0 72px;
+    padding: 56px 0 0;
     color: white;
+    transform: translateY(-5vh);
 }
 
 .eyebrow,
 .section-kicker {
     color: var(--accent-3);
-    font-size: 0.76rem;
+    font-size: 0.86rem;
     font-weight: 800;
-    letter-spacing: 0.12em;
+    letter-spacing: 0.08em;
     text-transform: uppercase;
+}
+
+.section-kicker {
+    display: none;
 }
 
 .eyebrow {
@@ -234,9 +244,9 @@ code {
 }
 
 h1 {
-    max-width: 900px;
+    max-width: 820px;
     margin-top: 14px;
-    font-size: clamp(2.35rem, 5.9vw, 5.35rem);
+    font-size: clamp(2.25rem, 5.1vw, 4.65rem);
     font-weight: 820;
     letter-spacing: 0;
 }
@@ -286,7 +296,7 @@ h1 {
 .section {
     width: min(calc(100% - 40px), var(--shell));
     margin: 0 auto;
-    padding: 84px 0;
+    padding: 42px 0;
 }
 
 .section-heading {
@@ -360,7 +370,7 @@ h1 {
 .system-detail p,
 .teleop-copy p,
 figcaption {
-    color: var(--muted);
+    color: var(--ink);
 }
 
 .media-feature {
@@ -398,16 +408,23 @@ figcaption {
 
 .belief-demo {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(240px, 0.42fr);
-    gap: 26px;
+    grid-template-columns: minmax(230px, 0.72fr) minmax(0, 1.28fr);
+    grid-template-areas:
+        "copy panel"
+        "controls panel";
+    gap: 18px;
     align-items: center;
     margin-top: 22px;
-    padding: 28px;
+    padding: 20px;
+}
+
+.entropy-copy {
+    grid-area: copy;
 }
 
 .entropy-copy p:not(.section-kicker) {
     margin-top: 10px;
-    color: var(--muted);
+    color: var(--ink);
 }
 
 .tab-list button,
@@ -420,14 +437,58 @@ figcaption {
 }
 
 .entropy-controls {
+    grid-area: controls;
     display: grid;
-    gap: 10px;
+    align-self: start;
+    gap: 8px;
+    position: relative;
 }
 
 .entropy-controls label {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: baseline;
     color: #223049;
     font-size: 0.88rem;
     font-weight: 800;
+}
+
+.entropy-controls label span {
+    position: relative;
+    display: inline-block;
+    color: var(--accent);
+    font-size: 0.74rem;
+    font-weight: 850;
+    text-transform: uppercase;
+    transform: translate(34px, -10px) rotate(7deg);
+    transform-origin: center;
+}
+
+.entropy-controls label span::after {
+    position: absolute;
+    top: 17px;
+    left: 50%;
+    display: block;
+    width: 2px;
+    height: 16px;
+    background: currentColor;
+    color: var(--accent);
+    content: "";
+    transform: translateX(-50%);
+}
+
+.entropy-controls label span::before {
+    position: absolute;
+    top: 28px;
+    left: 50%;
+    width: 7px;
+    height: 7px;
+    border-right: 2px solid var(--accent);
+    border-bottom: 2px solid var(--accent);
+    color: var(--accent);
+    content: "";
+    transform: translateX(-50%) rotate(45deg);
 }
 
 .entropy-controls input[type="range"] {
@@ -492,13 +553,13 @@ figcaption {
 }
 
 .entropy-panel {
-    grid-column: 1 / -1;
+    grid-area: panel;
     display: grid;
-    grid-template-columns: 150px minmax(0, 1fr);
-    gap: 18px;
+    grid-template-columns: 118px minmax(0, 1fr);
+    gap: 14px;
     align-items: start;
     min-width: 0;
-    padding: 22px;
+    padding: 18px;
     border-radius: 8px;
     background: #172033;
     color: white;
@@ -510,20 +571,20 @@ figcaption {
 
 .posterior-card {
     display: grid;
-    gap: 12px;
+    gap: 8px;
 }
 
 .posterior-bars {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 8px;
+    gap: 6px;
     align-items: end;
-    height: 112px;
+    height: 86px;
 }
 
 .posterior-bars span {
     position: relative;
-    height: 112px;
+    height: 86px;
     border-radius: 5px;
 }
 
@@ -582,8 +643,8 @@ figcaption {
 
 .sigmoid-row {
     display: grid;
-    grid-template-columns: 132px minmax(0, 1fr);
-    gap: 18px;
+    grid-template-columns: 104px minmax(0, 1fr);
+    gap: 6px;
     align-items: center;
     min-width: 0;
 }
@@ -606,7 +667,7 @@ figcaption {
 
 .sigmoid-row svg {
     display: block;
-    width: 100%;
+    width: min(100%, 364px);
     min-width: 0;
     height: auto;
     overflow: visible;
@@ -664,8 +725,8 @@ figcaption {
 .mode-readout {
     grid-column: 1 / -1;
     display: grid;
-    gap: 10px;
-    padding-top: 12px;
+    gap: 8px;
+    padding-top: 10px;
     border-top: 1px solid rgba(255, 255, 255, 0.14);
 }
 
@@ -788,7 +849,7 @@ figcaption {
     display: flex;
     flex-wrap: wrap;
     gap: 10px;
-    margin-bottom: 16px;
+    margin: 18px 0 16px;
 }
 
 .system-node {
@@ -802,7 +863,7 @@ figcaption {
 .system-detail ul {
     margin: 18px 0 0;
     padding-left: 20px;
-    color: var(--muted);
+    color: var(--ink);
 }
 
 .implementation-grid {
@@ -847,9 +908,18 @@ figcaption {
     line-height: 1.45;
 }
 
+figcaption strong {
+    font-weight: 900;
+}
+
 .facts {
     display: grid;
     gap: 12px;
+}
+
+.implementation-facts {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    margin-top: 0;
 }
 
 .facts div {
@@ -869,8 +939,194 @@ figcaption {
 .facts span {
     display: block;
     margin-top: 8px;
-    color: var(--muted);
+    color: var(--ink);
     line-height: 1.35;
+}
+
+.system-figure {
+    margin-top: 18px;
+}
+
+.visualization-placeholder {
+    overflow: hidden;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    background: white;
+}
+
+.viz-placeholder-grid {
+    display: grid;
+    grid-template-columns: 1.15fr 0.85fr;
+    gap: 1px;
+    background: var(--line);
+}
+
+.rviz-placeholder,
+.plotjuggler-placeholder {
+    min-height: 260px;
+    padding: 14px;
+    background: #f7f8fb;
+}
+
+.viz-toolbar {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 12px;
+}
+
+.viz-toolbar span {
+    width: 10px;
+    height: 10px;
+    border-radius: 999px;
+    background: #c7d1df;
+}
+
+.rviz-stage {
+    position: relative;
+    height: 190px;
+    overflow: hidden;
+    border: 1px solid #d8dee8;
+    border-radius: 6px;
+    background:
+        linear-gradient(rgba(22, 32, 52, 0.08) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(22, 32, 52, 0.08) 1px, transparent 1px),
+        #ffffff;
+    background-size: 28px 28px;
+}
+
+.rviz-robot {
+    position: absolute;
+    top: 70px;
+    left: 46%;
+    width: 42px;
+    height: 42px;
+    border: 6px solid var(--accent);
+    border-radius: 999px;
+}
+
+.rviz-robot::before,
+.rviz-robot::after {
+    position: absolute;
+    width: 54px;
+    height: 6px;
+    border-radius: 999px;
+    background: var(--accent);
+    content: "";
+    transform-origin: left center;
+}
+
+.rviz-robot::before {
+    top: 14px;
+    left: 28px;
+    transform: rotate(-24deg);
+}
+
+.rviz-robot::after {
+    top: 23px;
+    left: -42px;
+    transform: rotate(30deg);
+}
+
+.rviz-path,
+.rviz-goal {
+    position: absolute;
+    border-radius: 999px;
+}
+
+.rviz-path {
+    height: 4px;
+    background: var(--accent-3);
+    opacity: 0.9;
+}
+
+.path-a {
+    right: 36px;
+    bottom: 58px;
+    width: 120px;
+    transform: rotate(-16deg);
+}
+
+.path-b {
+    left: 34px;
+    top: 54px;
+    width: 116px;
+    background: var(--accent-2);
+    transform: rotate(22deg);
+}
+
+.rviz-goal {
+    width: 18px;
+    height: 18px;
+    border: 3px solid var(--accent-2);
+    background: rgba(185, 55, 74, 0.16);
+}
+
+.goal-a {
+    right: 28px;
+    bottom: 46px;
+}
+
+.goal-b {
+    left: 28px;
+    top: 42px;
+}
+
+.plot-lines {
+    position: relative;
+    height: 190px;
+    overflow: hidden;
+    border: 1px solid #d8dee8;
+    border-radius: 6px;
+    background:
+        linear-gradient(rgba(22, 32, 52, 0.08) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(22, 32, 52, 0.08) 1px, transparent 1px),
+        #ffffff;
+    background-size: 100% 25%, 44px 100%;
+}
+
+.plot-lines i {
+    position: absolute;
+    left: -8%;
+    width: 116%;
+    height: 54px;
+    border-top: 4px solid var(--accent);
+    border-radius: 50%;
+}
+
+.plot-lines i:nth-child(1) {
+    top: 42px;
+    transform: rotate(2deg);
+}
+
+.plot-lines i:nth-child(2) {
+    top: 78px;
+    border-color: var(--accent-2);
+    transform: rotate(-4deg);
+}
+
+.plot-lines i:nth-child(3) {
+    top: 108px;
+    border-color: var(--accent-3);
+    transform: rotate(5deg);
+}
+
+.plot-lines i:nth-child(4) {
+    top: 132px;
+    border-color: #536071;
+    transform: rotate(-2deg);
+}
+
+.visualization-placeholder strong {
+    display: block;
+    margin-top: 10px;
+}
+
+.acknowledgments {
+    padding-top: 24px;
+}
+
+.acknowledgments p {
+    color: var(--ink);
 }
 
 .teleop-layout {
@@ -880,20 +1136,29 @@ figcaption {
 }
 
 .teleop-layout.paired-data {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    align-items: stretch;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    align-items: start;
 }
 
-.teleop-layout.paired-data article {
+.dataset-column {
+    display: grid;
+    gap: 18px;
+}
+
+.teleop-layout.paired-data article,
+.teleop-layout.paired-data .dataset-signals-card {
     display: grid;
     align-content: start;
     gap: 12px;
-    min-height: 100%;
     padding: 22px;
     border: 1px solid #c7d1df;
     border-radius: 8px;
     background: white;
     box-shadow: 0 14px 34px rgba(22, 32, 52, 0.11);
+}
+
+.following-demo-card {
+    gap: 18px;
 }
 
 .teleop-layout.paired-data h3 {
@@ -902,7 +1167,7 @@ figcaption {
 }
 
 .teleop-layout.paired-data p {
-    color: var(--muted);
+    color: var(--ink);
 }
 
 .teleop-layout.paired-data figure {
@@ -914,7 +1179,7 @@ figcaption {
 }
 
 .vertical-crop-image {
-    aspect-ratio: 1333 / 1600;
+    aspect-ratio: 1 / 1.08;
     overflow: hidden;
 }
 
@@ -922,13 +1187,49 @@ figcaption {
     width: 100%;
     height: auto;
     max-width: none;
-    transform: translateY(-10%);
+    transform: translateY(-8%);
+}
+
+.dataset-signal-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+    margin-top: 4px;
+}
+
+.dataset-signal-grid span {
+    min-width: 0;
+    padding: 10px 12px;
+    border: 1px solid #d8dee8;
+    border-radius: 6px;
+    background: #f7f8fb;
+    color: var(--ink);
+    font-size: 0.9rem;
+    font-weight: 400;
+    line-height: 1.25;
+}
+
+.dataset-overview-row {
+    display: grid;
+    grid-template-columns: minmax(240px, 0.54fr) minmax(0, 1fr);
+    gap: 18px;
+    align-items: start;
+    margin-top: 22px;
 }
 
 .data-overview-figure {
-    width: min(100%, 560px);
-    margin: 22px auto 0;
+    width: 100%;
+    margin: 0;
     box-shadow: 0 14px 34px rgba(22, 32, 52, 0.11);
+}
+
+.dataset-signals-card {
+    padding: 22px;
+}
+
+.dataset-signals-card h3 {
+    margin-bottom: 14px;
+    font-size: 1.16rem;
 }
 
 .top-crop-image {
@@ -1000,6 +1301,41 @@ figcaption {
     font-size: 1.35rem;
 }
 
+.ablation-card {
+    display: grid;
+    grid-template-columns: minmax(0, 0.82fr) minmax(340px, 0.68fr);
+    gap: 18px;
+    align-items: start;
+    padding: 20px;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    background: white;
+    box-shadow: 0 8px 24px rgba(22, 32, 52, 0.06);
+}
+
+.ablation-copy {
+    display: grid;
+    gap: 16px;
+}
+
+.ablation-copy article + article {
+    padding-top: 16px;
+    border-top: 1px solid var(--line);
+}
+
+.ablation-copy h3 {
+    margin-bottom: 8px;
+}
+
+.ablation-copy p {
+    color: var(--ink);
+}
+
+.ablation-figure {
+    margin-top: 0;
+    box-shadow: none;
+}
+
 .paired-figure {
     box-shadow: 0 8px 24px rgba(22, 32, 52, 0.06);
 }
@@ -1047,7 +1383,7 @@ figcaption {
 }
 
 .conclusion {
-    padding-bottom: 104px;
+    padding-bottom: 52px;
 }
 
 .site-footer {
@@ -1063,8 +1399,19 @@ figcaption {
 
 @media (max-width: 920px) {
     .site-nav {
+        position: sticky;
+        top: 0;
+        left: auto;
+        right: auto;
+        transform: none;
+        flex-direction: row;
+        width: auto;
         justify-content: flex-start;
         overflow-x: auto;
+        padding: 10px;
+        border-width: 0 0 1px;
+        border-radius: 0;
+        box-shadow: none;
     }
 
     .hero {
@@ -1077,16 +1424,27 @@ figcaption {
     .cards.two,
     .flow,
     .belief-demo,
+    .implementation-facts,
     .implementation-grid,
     .teleop-layout,
+    .dataset-overview-row,
     .result-grid,
     .comparison-grid,
     .method-plots,
     .diagram-pair,
     .model-diagrams,
+    .ablation-card,
+    .viz-placeholder-grid,
     .result-grid.dense,
     .compact-diagrams {
         grid-template-columns: 1fr;
+    }
+
+    .belief-demo {
+        grid-template-areas:
+            "copy"
+            "controls"
+            "panel";
     }
 
 }
@@ -1116,12 +1474,13 @@ figcaption {
 
     .section {
         width: min(calc(100% - 28px), var(--shell));
-        padding: 58px 0;
+        padding: 34px 0;
     }
 
     .hero-content {
         width: min(calc(100% - 28px), var(--shell));
-        padding-bottom: 42px;
+        padding: 42px 0 0;
+        transform: translateY(-3vh);
     }
 
     h1 {
