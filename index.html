@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="Master thesis project website for Human-Robot Collaborative Object Manipulation Using Deep Active Inference by Ferdinand Hartmann.">
     <title>Human-Robot Collaborative Object Manipulation Using Deep Active Inference</title>
-    <link rel="stylesheet" href="./styles.css?v=20260813-23">
-    <script src="./script.js?v=20260813-3" defer></script>
+    <link rel="stylesheet" href="./styles.css?v=20260819-1">
+    <script src="./script.js?v=20260819-1" defer></script>
 </head>
 <body>
     <a class="skip-link" href="#main-content">Skip to main content</a>
@@ -45,11 +45,11 @@
             <div class="intro-grid">
                 <article>
                     <h3>Problem</h3>
-                    <p>In physical collaborative manipulation, the human's goal is only partially observable. Early motions can match several targets, intentions may change, and contact forces carry both safety-critical feedback and evidence about where the human wants to move.</p>
+                    <p>Good performance in physical human-robot collaboration requires the robot to assist the human's intended goal as much as possible, infer that goal early, stay compliant while uncertainty remains, and adapt quickly when the human changes their actions or intention. This requires smooth switching between following and leading behavior. However, the human goal is only partially observable: the same observations can match several intentions, and the human may change their mind during the task. Current methods do not deliver all of these capabilities together.</p>
                 </article>
                 <article>
                     <h3>Core Idea</h3>
-                    <p>A purely reactive robot can follow safely, but it cannot intentionally lead. This thesis uses deep active inference so the robot can choose actions that help the task while also clarifying the human's intention.</p>
+                    <p>Active inference provides a promising theory that unifies action and inference, inspired by how natural agents act to reduce uncertainty while pursuing goals. Although it has strong potential for human-robot collaboration, it remains underexplored in real physical pHRC settings. This thesis uses deep active inference so the robot can choose actions that both support the task and clarify the human's intention.</p>
                 </article>
                 <article>
                     <h3>Contribution</h3>
@@ -87,22 +87,22 @@
             <div class="flow" aria-label="AIF method flow">
                 <article>
                     <span>01</span>
-                    <h3>Observe</h3>
+                    <h3><span class="flow-icon" aria-hidden="true">👁️</span>Observe</h3>
                     <p>End-effector pose, velocity, wrench, tracking error, command pose, last action, and interaction labels are collected into a temporal observation window.</p>
                 </article>
                 <article>
                     <span>02</span>
-                    <h3>Predict</h3>
+                    <h3><span class="flow-icon" aria-hidden="true">🔮</span>Predict</h3>
                     <p>An ACT-based policy model proposes temporally coherent Cartesian action chunks. A world model evaluates future observations under those candidate policies.</p>
                 </article>
                 <article>
                     <span>03</span>
-                    <h3>Select</h3>
+                    <h3><span class="flow-icon" aria-hidden="true">🎯</span>Select</h3>
                     <p>Expected Free Energy combines pragmatic value, goal information gain, and state information gain. The lowest-EFE trajectory becomes the selected action chunk.</p>
                 </article>
                 <article>
                     <span>04</span>
-                    <h3>Act And Update</h3>
+                    <h3><span class="flow-icon" aria-hidden="true">🤝</span>Act And Update</h3>
                     <p>The controller executes the selected chunk while the world model updates from new observations at 30 Hz.</p>
                 </article>
             </div>
@@ -220,24 +220,27 @@
                 <div><strong>30 Hz</strong><span>world-model update and observation recording</span></div>
                 <div><strong>3 Hz</strong><span>planning cadence through 10-step action chunks</span></div>
                 <div><strong>9 goals</strong><span>physical boxlift positions for goal inference and stacking</span></div>
-                <div><strong>300 Hz</strong><span>smooth Cartesian command execution on the robot</span></div>
+                <div><strong>300 Hz</strong><span>interpolated trajectory execution from the 30 Hz loop</span></div>
+                <div><strong>1000 Hz</strong><span>Cartesian impedance controller on the robot</span></div>
             </div>
-            <div class="system-map">
-                <button type="button" class="system-node is-active" data-system="gpu">GPU AIF</button>
-                <button type="button" class="system-node" data-system="controller">Execution</button>
-                <button type="button" class="system-node" data-system="path">Handoff</button>
-                <button type="button" class="system-node" data-system="franka">Low-Level Control</button>
-                <button type="button" class="system-node" data-system="viz">Visualization</button>
+            <div class="implementation-tabs-box">
+                <div class="system-map">
+                    <button type="button" class="system-node is-active" data-system="gpu">GPU AIF</button>
+                    <button type="button" class="system-node" data-system="controller">Execution</button>
+                    <button type="button" class="system-node" data-system="path">Handoff</button>
+                    <button type="button" class="system-node" data-system="franka">Low-Level Control</button>
+                    <button type="button" class="system-node" data-system="viz">Visualization</button>
+                </div>
+                <article class="system-detail" data-system-detail>
+                    <h3>GPU AIF inference</h3>
+                    <p>The inference runtime builds the recent interaction history and sends it to a GPU server. The server proposes candidate action chunks, evaluates them with the world model, and returns the selected action for the robot.</p>
+                    <ul>
+                        <li>30 Hz timestep loop with 10-step planning phases.</li>
+                        <li>The observation history includes robot motion, interaction forces, tracking behavior, previous commands, and interaction mode information.</li>
+                        <li>The system records selected trajectories, candidate samples, goal belief, EFE metrics, surprise, and timing diagnostics for later analysis.</li>
+                    </ul>
+                </article>
             </div>
-            <article class="system-detail" data-system-detail>
-                <h3>GPU AIF inference</h3>
-                <p>The inference runtime builds the recent interaction history and sends it to a GPU server. The server proposes candidate action chunks, evaluates them with the world model, and returns the selected action for the robot.</p>
-                <ul>
-                    <li>30 Hz timestep loop with 10-step planning phases.</li>
-                    <li>The observation history includes robot motion, interaction forces, tracking behavior, previous commands, and interaction mode information.</li>
-                    <li>The system records selected trajectories, candidate samples, goal belief, EFE metrics, surprise, and timing diagnostics for later analysis.</li>
-                </ul>
-            </article>
         </section>
 
         <section class="section teleop" id="dataset">
@@ -289,10 +292,10 @@
             <div class="video-tabs" data-video-tabs>
                 <div class="tab-list" role="tablist" aria-label="Experiment views">
                     <button type="button" role="tab" aria-selected="true" data-panel="full">Full</button>
-                    <button type="button" role="tab" aria-selected="false" data-panel="goal-change">Goal change</button>
+                    <button type="button" role="tab" aria-selected="false" data-panel="goal-change">Goal Change</button>
                     <button type="button" role="tab" aria-selected="false" data-panel="stacking">Stacking</button>
-                    <button type="button" role="tab" aria-selected="false" data-panel="beta">Policy Model insights</button>
-                    <button type="button" role="tab" aria-selected="false" data-panel="world-model">World model insights</button>
+                    <button type="button" role="tab" aria-selected="false" data-panel="beta">Policy Model Insights</button>
+                    <button type="button" role="tab" aria-selected="false" data-panel="world-model">World Model Insights</button>
                 </div>
                 <div class="tab-panels">
                     <figure class="video-stage tab-panel is-active" data-panel-id="full">
@@ -300,7 +303,7 @@
                             <source src="./assets/videos/full-experiment.mp4" type="video/mp4">
                             Your browser cannot play this video.
                         </video>
-                        <figcaption><strong>Full experiment</strong><span>The complete boxlift trial shows the robot assisting the human toward an inferred target.</span></figcaption>
+                        <figcaption>Full experiment</figcaption>
                     </figure>
                     <figure class="video-stage tab-panel" data-panel-id="goal-change" hidden>
                         <video controls muted playsinline preload="metadata">
@@ -362,7 +365,7 @@
                     </div>
                     <div class="tab-panel world-model-panel" data-panel-id="world-model" hidden>
                         <div class="comparison-block">
-                            <h3>World model insights</h3>
+                            <h3>World Model Insights</h3>
                             <div class="insight-stack">
                                 <figure class="wide-figure">
                                     <img src="./assets/result-images/thesis_rollout_recon_vs_true.png" alt="World-model rollout reconstructions compared against observed signals">

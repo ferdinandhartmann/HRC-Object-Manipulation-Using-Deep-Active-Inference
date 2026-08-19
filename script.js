@@ -266,10 +266,14 @@ document.addEventListener('DOMContentLoaded', () => {
             image.setAttribute('aria-label', `Expand image: ${image.alt || 'visual'}`);
 
             const openLightbox = () => {
-                const caption = image.closest('figure')?.querySelector('figcaption')?.textContent || image.alt || '';
+                const captionNode = image.closest('figure')?.querySelector('figcaption');
                 lightboxImage.src = image.currentSrc || image.src;
                 lightboxImage.alt = image.alt || '';
-                lightboxCaption.textContent = caption;
+                if (captionNode) {
+                    lightboxCaption.innerHTML = captionNode.innerHTML;
+                } else {
+                    lightboxCaption.textContent = image.alt || '';
+                }
                 lightbox.hidden = false;
                 document.body.style.overflow = 'hidden';
                 closeButton.focus();
