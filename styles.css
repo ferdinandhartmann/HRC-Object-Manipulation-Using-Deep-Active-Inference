@@ -412,8 +412,8 @@ figcaption {
     place-items: center;
     margin-bottom: 18px;
     border-radius: 999px;
-    background: #e6f2f3;
-    color: var(--accent);
+    background: #fbf0d8;
+    color: var(--accent-3);
     font-size: 0.84rem;
     font-weight: 850;
 }
@@ -796,9 +796,24 @@ figcaption {
     box-shadow: 0 8px 24px rgba(22, 32, 52, 0.06);
 }
 
+.abstract-card summary {
+    cursor: pointer;
+    color: var(--ink);
+    font-size: 1.16rem;
+    font-weight: 850;
+}
+
+.abstract-card[open] summary {
+    margin-bottom: 12px;
+}
+
 .abstract-card p {
     max-width: 980px;
     color: var(--muted);
+}
+
+.abstract-card p + p {
+    margin-top: 12px;
 }
 
 .diagram-pair,
@@ -969,7 +984,7 @@ figcaption strong {
 
 .facts strong {
     display: block;
-    color: var(--accent-2);
+    color: var(--accent-3);
     font-size: 2rem;
     line-height: 1;
 }

@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="Master thesis project website for Human-Robot Collaborative Object Manipulation Using Deep Active Inference by Ferdinand Hartmann.">
     <title>Human-Robot Collaborative Object Manipulation Using Deep Active Inference</title>
-    <link rel="stylesheet" href="./styles.css?v=20260820-13">
+    <link rel="stylesheet" href="./styles.css?v=20260821-1">
     <script src="./script.js?v=20260820-9" defer></script>
 </head>
 <body>
@@ -26,7 +26,7 @@
         </div>
         <div class="hero-content">
             <p class="eyebrow">Master Thesis Project</p>
-            <h1>Human-Robot Collaborative Object Manipulation with Deep Active Inference</h1>
+            <h1>Human-Robot Collaborative Object Manipulation using Deep Active Inference</h1>
             <p class="hero-copy">A real-time Active Inference (AIF) system for physical human-robot collaboration (pHRC), with a Franka Research 3 (FR3) arm. The robot actively infers human intent, balances following and leading, and assists in a collaborative box-handling task.</p>
             <dl class="hero-meta">
                 <div><dt>Student</dt><dd>Ferdinand Hartmann</dd></div>
@@ -37,10 +37,10 @@
     </header>
 
     <main id="main-content">
-        <section class="section project-summary" aria-label="Project summary">
+        <!-- <section class="section project-summary" aria-label="Project summary">
             <p class="section-kicker">Project Summary</p>
             <p>This thesis develops a real-time Deep Active Inference system for physical human-robot collaboration. A FR3 cobot observes motion and force signals, actively infers the human's intended goal, proposes action chunks from a Transformer-based policy model, evaluates them with a learned World Model and Expected Free Energy (EFE), and selects actions that balance task progress with uncertainty reduction. The result is a robot that can actively infer the goal faster than passive baselines, stay compliant when uncertain, adapt to changing human intent, and provide stronger assistance once the goal becomes clear.</p>
-        </section>
+        </section> -->
 
         <section class="section intro-section">
             <div class="section-heading">
@@ -61,10 +61,13 @@
                     <p>The proposed method integrates an ACT candidate-policy model, a learned World Model, and a categorical goal posterior into a real-time deep AIF system. Multiple candidate action chunks are proposed, evaluated, and selected by balancing task progress with information gain about the human's intended goal, while a confidence-aware role-adaptation mechanism ensures smooth transitions between following and leading behaviors. The system is evaluated on a real-world pHRC setup in a collaborative box-handling task.</p>
                 </article>
             </div>
-            <article class="abstract-card">
-                <h3>Abstract</h3>
-                <p>The proposed system combines an Action Chunking with Transformers policy model, a learned World Model, and an explicit categorical posterior over human goals. Candidate action chunks are evaluated by Expected Free Energy (EFE), balancing information gain about the human's goal and hidden interaction state with pragmatic value for leading or following behavior. On a FR3 cobot in a force-dependent collaborative box-lifting and transport task, the framework reduces goal uncertainty faster than passive inference baselines and provides stronger collaborative assistance, while also showing that EFE selection depends strongly on World Model accuracy.</p>
-            </article>
+            <details class="abstract-card">
+                <summary>Abstract</summary>
+                <p>Effective physical human-robot collaboration (pHRC) requires a robot to infer the human's intent early, act under uncertainty, adapt quickly to changing human behavior, and shift smoothly between leading and following, all without intrusive measurements. Existing methods fall short because most are reactive, unable to intentionally lead, assist, or actively try to infer intent when it is unclear, and no approach unifies these capabilities.</p>
+                <p>Active inference (AIF) offers a promising alternative. Inspired by how living agents act to understand their environment while pursuing goals, AIF selects actions that both advance a task and reduce uncertainty, giving a robot a natural way to infer human intent while adapting its behavior in real time. Despite this potential, AIF remains underexplored in real-world human-robot interaction (HRI). This thesis investigates deep AIF as a framework for handling uncertainty while jointly pursuing goal progress, inferring intent, and adapting behavior for proactive collaboration.</p>
+                <p>The proposed system pairs an Action Chunking with Transformers (ACT) policy with a learned world model that maintains an explicit categorical posterior over human goals. The ACT-based policy model proposes multiple temporally coherent candidate action chunks from recent proprioceptive observations. The world model then scores these candidates by expected free energy (EFE), balancing information gain about the human's goal and interaction state against the pragmatic value of leading or following.</p>
+                <p>The approach is evaluated on a Franka Research 3 (FR3) robot in a force-dependent box-lifting and transport task, where the box is held only by the clamping force of both agents and the human secretly selects the target location. Against passive-inference and behavior-cloning baselines, the AIF framework resolves goal uncertainty faster and provides stronger collaborative assistance, though EFE-based selection remains sensitive to world model accuracy. These results show that ACT is an effective policy proposal model for real-time deep AIF, and position AIF as a promising paradigm for unifying intent inference, information-seeking, and proactive assistance in pHRI.</p>
+            </details>
         </section>
 
         <section class="section media-feature" aria-label="Featured experiment video">
