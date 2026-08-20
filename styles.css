@@ -647,6 +647,12 @@ figcaption {
     font-variant-numeric: tabular-nums;
 }
 
+.posterior-values small {
+    color: #c9d3df;
+    font-size: 0.8rem;
+    font-variant-numeric: tabular-nums;
+}
+
 .sigmoid-stack {
     display: grid;
     gap: 12px;
@@ -950,7 +956,7 @@ figcaption strong {
 }
 
 .implementation-facts {
-    grid-template-columns: repeat(5, minmax(0, 1fr));
+    grid-template-columns: repeat(4, minmax(0, 1fr));
     margin-top: 0;
 }
 
@@ -1376,6 +1382,25 @@ figcaption strong {
     display: block;
     margin-bottom: 3px;
     color: var(--ink);
+}
+
+.setup-hardware {
+    overflow: hidden;
+    margin-top: 18px;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    background: white;
+}
+
+.setup-hardware img {
+    width: 100%;
+    aspect-ratio: 2.05 / 1;
+    object-fit: cover;
+    object-position: center;
+}
+
+.setup-hardware figcaption {
+    font-size: 0.85rem;
 }
 
 .task-images {

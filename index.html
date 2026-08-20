@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="Master thesis project website for Human-Robot Collaborative Object Manipulation Using Deep Active Inference by Ferdinand Hartmann.">
     <title>Human-Robot Collaborative Object Manipulation Using Deep Active Inference</title>
-    <link rel="stylesheet" href="./styles.css?v=20260820-11">
-    <script src="./script.js?v=20260820-8" defer></script>
+    <link rel="stylesheet" href="./styles.css?v=20260820-13">
+    <script src="./script.js?v=20260820-9" defer></script>
 </head>
 <body>
     <a class="skip-link" href="#main-content">Skip to main content</a>
@@ -27,7 +27,7 @@
         <div class="hero-content">
             <p class="eyebrow">Master Thesis Project</p>
             <h1>Human-Robot Collaborative Object Manipulation with Deep Active Inference</h1>
-            <p class="hero-copy">A real-time Active Inference (AIF) system for physical human-robot collaboration (pHRC), a form of human-robot interaction (HRI), with a Franka Research 3 (FR3) arm. The robot infers human intent, balances following and leading, and selects action chunks for collaborative box-handling.</p>
+            <p class="hero-copy">A real-time Active Inference (AIF) system for physical human-robot collaboration (pHRC), with a Franka Research 3 (FR3) arm. The robot actively infers human intent, balances following and leading, and assists in a collaborative box-handling task.</p>
             <dl class="hero-meta">
                 <div><dt>Student</dt><dd>Ferdinand Hartmann</dd></div>
                 <div><dt>Supervision</dt><dd>Shingo Murata (Keio University)<br><span>Co-supervisor: Vincent Fremont (EC Nantes)</span></dd></div>
@@ -39,7 +39,7 @@
     <main id="main-content">
         <section class="section project-summary" aria-label="Project summary">
             <p class="section-kicker">Project Summary</p>
-            <p>This thesis develops a real-time Deep Active Inference system for physical human-robot collaboration. An FR3 robot observes motion and force signals, actively infers the human's intended goal, proposes action chunks from a Transformer-based policy model, evaluates them with a learned World Model and Expected Free Energy (EFE), and selects actions that balance task progress with uncertainty reduction. The result is a robot that can actively infer the goal faster than passive baselines, stay compliant when uncertain, adapt to changing human intent, and provide stronger assistance once the goal becomes clear.</p>
+            <p>This thesis develops a real-time Deep Active Inference system for physical human-robot collaboration. A FR3 cobot observes motion and force signals, actively infers the human's intended goal, proposes action chunks from a Transformer-based policy model, evaluates them with a learned World Model and Expected Free Energy (EFE), and selects actions that balance task progress with uncertainty reduction. The result is a robot that can actively infer the goal faster than passive baselines, stay compliant when uncertain, adapt to changing human intent, and provide stronger assistance once the goal becomes clear.</p>
         </section>
 
         <section class="section intro-section">
@@ -54,7 +54,7 @@
                 </article>
                 <article>
                     <h3>Core Idea</h3>
-                    <p>AIF provides a promising framework that unifies action and inference, inspired by how living agents continuously act to understand their environment and achieve their goals. Although AIF has strong potential for HRI, it remains underexplored in real-world pHRC settings. This thesis uses deep AIF to allow the robot to naturally handle uncertainty while pursuing goal progress and inferring human intent, leading to effective collaboration.</p>
+                    <p>AIF provides a promising framework that unifies action and inference, inspired by how living agents continuously act to understand their environment and achieve their goals. Although AIF has strong potential for human robot interaction, it remains underexplored in real-world pHRC settings. This thesis uses deep AIF to allow the robot to naturally handle uncertainty while pursuing goal progress and inferring human intent, leading to effective collaboration.</p>
                 </article>
                 <article>
                     <h3>Contribution</h3>
@@ -63,7 +63,7 @@
             </div>
             <article class="abstract-card">
                 <h3>Abstract</h3>
-                <p>The proposed system combines an Action Chunking with Transformers Policy Model, a learned World Model, and an explicit categorical posterior over human goals. Candidate action chunks are evaluated by Expected Free Energy (EFE), balancing information gain about the human's goal and hidden interaction state with pragmatic value for leading or following behavior. On a Franka Research 3 robot in a force-dependent collaborative box-lifting and transport task, the framework reduces goal uncertainty faster than passive inference baselines and provides stronger collaborative assistance, while also showing that EFE selection depends strongly on World Model accuracy.</p>
+                <p>The proposed system combines an Action Chunking with Transformers policy model, a learned World Model, and an explicit categorical posterior over human goals. Candidate action chunks are evaluated by Expected Free Energy (EFE), balancing information gain about the human's goal and hidden interaction state with pragmatic value for leading or following behavior. On a FR3 cobot in a force-dependent collaborative box-lifting and transport task, the framework reduces goal uncertainty faster than passive inference baselines and provides stronger collaborative assistance, while also showing that EFE selection depends strongly on World Model accuracy.</p>
             </article>
         </section>
 
@@ -93,22 +93,22 @@
                 <article>
                     <span>01</span>
                     <h3>Observe</h3>
-                    <p>End-effector pose, velocity, wrench, tracking error, command pose, last action, and interaction labels are collected into a temporal observation window.</p>
+                    <p>End-effector pose, velocity, wrench, command pose, and goal belief and interaction mode are collected into a temporal observation window.</p>
                 </article>
                 <article>
                     <span>02</span>
                     <h3>Predict</h3>
-                    <p>An ACT-based Policy Model proposes temporally coherent Cartesian action chunks. A World Model evaluates future observations under those candidate policies.</p>
+                    <p>An ACT-based policy model proposes temporally coherent relative action chunks. A World Model predicts future observations under those candidate policies.</p>
                 </article>
                 <article>
                     <span>03</span>
                     <h3>Select</h3>
-                    <p>EFE combines pragmatic value, goal information gain, and state information gain. Forty candidate action chunks are generated and evaluated, and the lowest-EFE trajectory becomes the selected action chunk.</p>
+                    <p>EFE combines pragmatic value (goal directed behavior), goal information gain, and state information gain. 40 candidate action chunks are generated, evaluated, and the one with the lowest EFE is selected.</p>
                 </article>
                 <article>
                     <span>04</span>
                     <h3>Act and Update</h3>
-                    <p>The controller executes the selected chunk while the World Model updates from new observations at 30 Hz.</p>
+                    <p>The Cartesian impedance controller executes the selected chunk while the World Model updates from new observations.</p>
                 </article>
             </div>
 
@@ -116,7 +116,7 @@
                 <div class="entropy-copy">
                     <p class="section-kicker">Interactive Explainer</p>
                     <h3>Certainty changes the role.</h3>
-                    <p>Move from an ambiguous 3-goal posterior to a confident one. Goal entropy maps the robot from exploration and compliant following toward assistance and leading.</p>
+                    <p>Move from an ambiguous 3-goal belief to a confident one. Goal entropy maps the robot from exploration and compliant following toward assistance and leading.</p>
                 </div>
                 <div class="entropy-controls">
                     <label for="certainty-slider">Goal certainty <span>drag to adjust</span></label>
@@ -135,6 +135,7 @@
                         </div>
                         <div class="posterior-values">
                             <strong>Goal posterior</strong>
+                            <small><span data-entropy-value>0.00</span> entropy</small>
                         </div>
                     </div>
                     <div class="sigmoid-stack">
@@ -196,22 +197,21 @@
                                 <i data-mode-balance></i>
                             </div>
                         </div>
-                        <small><span data-entropy-value>0.00</span> entropy</small>
                     </div>
                 </div>
             </div>
             <div class="model-diagrams">
                 <figure>
                     <img src="./assets/diagram-images/act_diagramm-01.png" alt="ACT-based Policy Model diagram">
-                    <figcaption><strong>Policy.</strong> The ACT-based model creates diverse, temporally coherent candidate action chunks for the robot.</figcaption>
+                    <figcaption><strong>Policy Model Architecture.</strong> By sampling the Prior during inference, multiple action chunks can be decoded in parallel.</figcaption>
                 </figure>
                 <figure>
                     <img src="./assets/diagram-images/wm_update_diagramm-01.png" alt="World Model update diagram">
-                    <figcaption><strong>Update.</strong> New observations are used to keep the internal model aligned with the real interaction.</figcaption>
+                    <figcaption><strong>World Model Update.</strong> New observations are used to update the hidden internal states and the goal posterior.</figcaption>
                 </figure>
                 <figure>
                     <img src="./assets/diagram-images/wm_planning_diagramm-01.png" alt="World Model planning diagram">
-                    <figcaption><strong>Planning.</strong> Candidate futures are evaluated with pragmatic value, state information gain, and goal information gain.</figcaption>
+                    <figcaption><strong>World Model Planning.</strong> Action chunks are evaluated auto-regressively step by step with pragmatic value, state information gain, and goal information gain.</figcaption>
                 </figure>
             </div>
         </section>
@@ -222,10 +222,9 @@
                 <h2>Implementation</h2>
             </div>
             <div class="facts implementation-facts">
-                <div><strong>30 Hz</strong><span>World Model update and observation recording</span></div>
                 <div><strong>3 Hz</strong><span>planning cadence through 10-step action chunks</span></div>
-                <!-- <div><strong>9 goals</strong><span>physical boxlift positions for goal inference and stacking</span></div> -->
-                <div><strong>300 Hz</strong><span>interpolated trajectory execution from the 30 Hz loop</span></div>
+                <div><strong>30 Hz</strong><span>World Model update and observation recording</span></div>
+                <div><strong>300 Hz</strong><span>interpolated trajectory execution from the 30 Hz trajectory</span></div>
                 <div><strong>1000 Hz</strong><span>Cartesian impedance controller on the robot</span></div>
             </div>
             <div class="implementation-tabs-box">
@@ -247,7 +246,7 @@
                     </ul>
                     <figure class="wide-figure no-crop-figure system-figure">
                         <img src="./assets/images/realtime-inference.png" alt="Real-time inference architecture diagram">
-                        <figcaption>Real-time inference architecture used to connect Policy Model prediction, World Model update, action execution.</figcaption>
+                        <figcaption><strong>Real-time inference architecture</strong> Used to connect policy model prediction, World Model update, and action execution for real-time collaboration.</figcaption>
                     </figure>
                 </article>
             </div>
@@ -265,7 +264,7 @@
                         <figure>
                             <div class="vertical-crop-image">
                                 <img src="./assets/images/teleop-factr.jpg" alt="FACTR leader arm and Franka boxlift setup">
-                            </div>
+                            </div> 
                             <figcaption>Cartesian teleoperation based on <a href="https://github.com/JasonJZLiu/FACTR_Hardware">FACTR</a> maps the leader arm motion to Franka follower commands for goal-directed boxlift demonstrations.</figcaption>
                         </figure>
                     </article>
@@ -279,10 +278,10 @@
                         <h3>Recorded Observations</h3>
                         <div class="dataset-signal-grid" aria-label="Recorded dataset signals">
                             <span>EE pose</span>
-                            <span>EE vel</span>
-                            <span>EE wrench</span>
                             <span>Commanded EE pose</span>
+                            <span>EE vel</span>
                             <span>Goal label</span>
+                            <span>EE wrench</span>
                             <span>Interaction mode</span>
                         </div>
                     </article>
@@ -304,28 +303,32 @@
             <div class="task-setup">
                 <div class="task-copy">
                     <h3>Task and Setup</h3>
-                    <p>A human and a Franka Research 3 jointly lift and transport a box from a shared start position. The human knows the target, but the robot must infer it from motion and force observations while still assisting the transport.</p>
+                    <p>A human and a FR3 cobot jointly lift and transport a box from a shared start position. The human knows the target, but the robot must infer it from motion and force observations while still assisting the transport.</p>
                     <div class="task-facts">
                         <span><strong>3 base goals</strong>Main evaluation with overlapping paths that create intent ambiguity.</span>
                         <span><strong>9 stored destinations</strong>Three base positions with three height levels for stacking scenarios.</span>
                         <span><strong>Flat contact</strong>A flat robot plate and flat human hand require continuous clamping force.</span>
                         <span><strong>FR3 platform</strong>Custom anti-slip plate, ROS 2 Humble, and RTX 3080 inference.</span>
                     </div>
+                    <figure class="setup-hardware">
+                        <img src="./assets/images/gripper-board.jpg" alt="Custom flat gripper board mounted on the FR3 robot">
+                        <figcaption><strong>Custom end-effector.</strong> Flat 3D-printed board with anti-slip rubber for stable box contact and a small ledge to reduce small slipping faliures.</figcaption>
+                    </figure>
                 </div>
                 <div class="task-images">
                     <figure>
-                        <img src="./assets/images/experiment-overview-1.jpg" alt="Franka robot and human moving a box toward one of three base goals">
+                        <img src="./assets/images/experiment-overview-1.jpg" alt="FR3 cobot and human moving a box toward one of three base goals">
                         <figcaption><strong>Main task.</strong> The box is transported toward one of three possible base goals while the robot infers the human's intent.</figcaption>
                     </figure>
                     <figure>
                         <img src="./assets/images/experiment-stacking-1.jpg" alt="Extended stacking task with three base positions and stacked boxes">
-                        <figcaption><strong>Extended stacking task.</strong> After each placement, the arrangement updates and the robot returns to the start for the next box.</figcaption>
+                        <figcaption><strong>Extended stacking task.</strong> After each placement, the arrangement updates and the robot returns to the start for the next box enabling continuous box stacking.</figcaption>
                     </figure>
                 </div>
             </div>
             <div class="video-tabs" data-video-tabs>
                 <div class="tab-list" role="tablist" aria-label="Experiment views">
-                    <button type="button" role="tab" aria-selected="true" data-panel="full">Full</button>
+                    <button type="button" role="tab" aria-selected="true" data-panel="full">Main</button>
                     <button type="button" role="tab" aria-selected="false" data-panel="goal-change">Goal Change</button>
                     <button type="button" role="tab" aria-selected="false" data-panel="stacking">Stacking</button>
                     <button type="button" role="tab" aria-selected="false" data-panel="beta">Policy Model Insights</button>
@@ -337,14 +340,14 @@
                             <source src="./assets/videos/full-experiment.mp4" type="video/mp4">
                             Your browser cannot play this video.
                         </video>
-                        <figcaption>Full experiment</figcaption>
+                        <figcaption><strong>Main experiment </strong><span>When the goal belief is uncertain, information gain is higher to reduce uncertainty. Once the goal becomes clearer, the interaction mode changes to leading, and the distance to the goal is reduced by selecting actions with high pragmatic value.</span></figcaption>
                     </figure>
                     <figure class="video-stage tab-panel" data-panel-id="goal-change" hidden>
                         <video controls muted playsinline preload="metadata">
                             <source src="./assets/videos/goal-change.mp4" type="video/mp4">
                             Your browser cannot play this video.
                         </video>
-                        <figcaption><strong>Changing goal mid-trial</strong><span>The goal posterior changes after the human redirects the box, and the selected policy adapts.</span></figcaption>
+                        <figcaption><strong>Changing goal mid-trial</strong><span>When the human's intention changes, interaction forces rise due to conflict, and surprise increases, shifting the system into following mode. The new goal can then be actively inferred again, allowing the robot to lead toward it.</span></figcaption>
                     </figure>
                     <figure class="video-stage tab-panel" data-panel-id="stacking" hidden>
                         <video controls muted playsinline preload="metadata">
@@ -361,37 +364,37 @@
                                     <source src="./assets/videos/beta-latent-comparison.mp4" type="video/mp4">
                                     Your browser cannot play this video.
                                 </video>
-                                <figcaption><strong>High beta left, low beta right.</strong> Higher beta constrains the latent distribution, while lower beta preserves broader candidate-policy diversity.</figcaption>
+                                <figcaption><strong>High beta left, optimal beta right.</strong> Higher beta constrains the latent distribution too much, while optimal beta provides some amount of flexibility to encode information.</figcaption>
                             </figure>
                         </div>
 
                         <div class="comparison-block">
-                            <h3>Attention and candidate-action average</h3>
+                            <h3>Attention</h3>
                             <figure class="paired-figure">
                                 <div class="paired-media">
                                     <div>
                                     <img src="./assets/results/ca-average-boxlift-fb2.png" alt="Attention and candidate-action average visualization for high beta">
-                                    <figcaption><strong>High beta.</strong> Candidate-action statistics for the higher beta setting.</figcaption>
+                                    <figcaption><strong>High beta.</strong> The Z token is mostly ignored as samples from the prior are treated as noise.</figcaption>
                                     </div>
                                     <div>
-                                    <img src="./assets/results/ca-average-boxlift-fb02.png" alt="Attention and candidate-action average visualization for low beta">
-                                    <figcaption><strong>Low beta.</strong> Candidate-action statistics for the lower beta setting.</figcaption>
+                                    <img src="./assets/results/ca-average-boxlift-fb02.png" alt="Attention and candidate-action average visualization for optimal beta">
+                                    <figcaption><strong>Optimal beta.</strong> The Z token recieves more attention, allowing for better encoding of information.</figcaption>
                                     </div>
                                 </div>
                             </figure>
                         </div>
 
                         <div class="comparison-block">
-                            <h3>3D predicted actions</h3>
+                            <h3>Predicted actions</h3>
                             <figure class="paired-figure">
                                 <div class="paired-media">
                                     <div>
                                     <img src="./assets/results/3d-prediction-boxlift-fb2.png" alt="3D predicted actions for high beta">
-                                    <figcaption><strong>High beta.</strong> Predicted action chunks are more concentrated around the dominant behavior.</figcaption>
+                                    <figcaption><strong>High beta.</strong> No diversity in sampled action chunks as the Z token is ignored.</figcaption>
                                     </div>
                                     <div>
-                                    <img src="./assets/results/3d-prediction-boxlift-fb02.png" alt="3D predicted actions for low beta">
-                                    <figcaption><strong>Low beta.</strong> Predicted action chunks keep more spatial variation.</figcaption>
+                                    <img src="./assets/results/3d-prediction-boxlift-fb02.png" alt="3D predicted actions for optimal beta">
+                                    <figcaption><strong>Optimal beta.</strong> Decoded trajectories with samples from the prior show good variation while maintaining smooth and meaningful trajectories.</figcaption>
                                     </div>
                                 </div>
                             </figure>
@@ -403,11 +406,11 @@
                             <div class="insight-stack">
                                 <figure class="wide-figure">
                                     <img src="./assets/result-images/thesis_rollout_recon_vs_true.png" alt="World Model rollout reconstructions compared against observed signals">
-                                    <figcaption><strong>World Model rollout reconstruction.</strong> Selected-policy rollouts are compared against observed motion, rotation, velocity, and force signals.</figcaption>
+                                    <figcaption><strong>World Model rollout reconstructions.</strong> Selected-policy rollouts per goal are compared against observations.</figcaption>
                                 </figure>
                                 <figure class="wide-figure compact-result-figure">
                                     <img src="./assets/result-images/efe_over_time_thesis.png" alt="Expected Free Energy, posterior, interaction mode, surprise, and wrench over time">
-                                    <figcaption><strong>EFE and interaction trace.</strong> Goal posterior, interaction mode, distance to goals, EFE components, surprise, and external wrench are shown over one representative trial.</figcaption>
+                                    <figcaption><strong>EFE and interaction metrics.</strong> When the goal belief is uncertain, information gain is higher to reduce uncertainty. Once the goal becomes clearer, the interaction mode changes to leading, and the distance to the goal is reduced by selecting actions with high pragmatic value.</figcaption>
                                 </figure>
                             </div>
                         </div>
@@ -416,20 +419,20 @@
             </div>
             <div class="comparison-block">
                 <h3>Quantitative results</h3>
-                <p class="comparison-intro">The proposed AIF system is compared against passive-value selection without information gain and a Policy Model baseline that infers the goal posterior but does not actively plan for uncertainty reduction.</p>
+                <p class="comparison-intro">The proposed AIF system is compared against passive-value selection without information gain and a policy model baseline that infers the goal posterior but does not actively plan for uncertainty reduction. For each method, 10 trials per goal were conducted, resulting in a total of 30 trials for each method.</p>
                 <figure class="wide-figure compact-result-figure">
                     <img src="./assets/result-images/thesis_outcome_comparison.png" alt="Comparison of success rate, episode duration, and final distance to goal for AIF and baselines">
-                    <figcaption><strong>Task outcome comparison.</strong> AIF is compared against passive-value selection without information gain and a Policy Model baseline with goal posterior inference.</figcaption>
+                    <figcaption><strong>Task outcome comparison.</strong> AIF is compared against passive-value selection without information gain and a policy model baseline with goal posterior inference and shows better performance.</figcaption>
                 </figure>
                 <figure class="wide-figure compact-result-figure">
                     <img src="./assets/result-images/thesis_inference_interaction_comparison.png" alt="Comparison of correct-goal posterior and leading behavior for AIF and baselines">
-                    <figcaption><strong>Inference and interaction comparison.</strong> The plot compares correct-goal posterior, final posterior, leading behavior, and correctness while leading.</figcaption>
+                    <figcaption><strong>Inference and assistance comparison of AIF method and baselines.</strong> The proposed AIF system demonstrates superior performance in both goal inference and assistance quality.</figcaption>
                 </figure>
             </div>
             <div class="result-grid dense centered-result-grid">
                 <figure class="compact-result-figure">
                     <img src="./assets/result-images/thesis_posterior_force_over_time-01.png" alt="Goal posterior and force over time">
-                    <figcaption>Goal posterior and measured force over time.</figcaption>
+                    <figcaption><strong>Goal posterior of the correct goal and entropy comparing AIF and baselines. </strong> The proposed AIF system shows faster goal inference and entropy reduction.</figcaption>
                 </figure>
             </div>
             <div class="comparison-block">
@@ -454,7 +457,7 @@
                     </div>
                     <figure class="wide-figure ablation-figure">
                         <img src="./assets/diagram-images/admittance_diagramm-01.png" alt="Admittance controller diagram">
-                        <figcaption><strong>Admittance controller.</strong> Human-applied forces produce a compliant offset around the robot's equilibrium pose, while stiffness and damping shape how strongly the robot assists or yields.</figcaption>
+                        <figcaption><strong>Cascaded Admittance controller.</strong>  The target pose computed by the admittance controller is given to the impedance controller compared to the raw actions in the original method. The Wrench offset ensures stable clamping force around the equilibrium pose, while the interaction mode adjusts stiffness and damping dynamically.</figcaption>
                     </figure>
                 </div>
             </div>
@@ -468,7 +471,7 @@
             <div class="cards two">
                 <article>
                     <h3>Findings</h3>
-                    <p>The full AIF system reduced uncertainty about the human's intended goal more quickly than passive inference and assisted the human more effectively than non-planning policy baselines. Combined with a natural-feeling transition between following and leading, this resulted in superior collaboration performance. The Policy Model successfully generated diverse and coherent action chunks within the online timing budget.</p>
+                    <p>The full AIF system reduced uncertainty about the human's intended goal more quickly than passive inference and assisted the human more effectively than non-planning policy baselines. Combined with a natural-feeling transition between following and leading, this resulted in superior collaboration performance. The policy model successfully generated diverse and coherent action chunks within the online timing budget.</p>
                 </article>
                 <article>
                     <h3>Limitations and Future Work</h3>

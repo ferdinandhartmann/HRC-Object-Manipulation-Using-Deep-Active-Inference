@@ -126,7 +126,7 @@ document.addEventListener('DOMContentLoaded', () => {
             figure: {
                 src: './assets/images/realtime-inference.png',
                 alt: 'Real-time inference architecture diagram',
-                caption: 'Real-time inference architecture used to connect Policy Model prediction, World Model update, action execution.'
+                caption: 'Real-time inference architecture used to connect policy model prediction, World Model update, action execution.'
             }
         },
         franka: {
@@ -136,8 +136,8 @@ document.addEventListener('DOMContentLoaded', () => {
         },
         viz: {
             title: 'Visualization and recording',
-            body: 'Visualization and recording make the behavior inspectable after each trial. The system stores what the robot believed, what it considered, what it selected, and how the interaction forces evolved.',
-            bullets: ['Goal markers show the most likely target and completed stacking boxes.', 'Candidate and selected trajectories are drawn as RViz marker paths.', 'Recorder stores synchronized robot state, wrench, images, predictions, EFE metrics, posterior, and timing.'],
+            body: 'Visualization and recording make the behavior inspectable during and after each trial.',
+            bullets: ['The system visualizes possible goals, the goal belief, the predicted candidate action chunks and their associated values after evaluation.', 'Recorder stores synchronized robot state, wrench, images, predictions, EFE metrics for each trajectory, posterior, and timing.'],
             placeholder: 'visualization'
         }
     };
