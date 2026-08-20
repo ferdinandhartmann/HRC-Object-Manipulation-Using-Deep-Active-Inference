@@ -119,30 +119,20 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     const systemText = {
-        gpu: {
-            title: 'GPU AIF inference',
-            body: 'The inference runtime builds a recent interaction history and evaluates candidate action chunks on a GPU server. The selected action is the one expected to best balance task progress and uncertainty reduction.',
-            bullets: ['30 Hz observation and update loop with short action chunks.', 'Inputs summarize robot motion, force interaction, previous commands, and interaction mode.', 'The system records goal belief, candidate trajectories, EFE components, surprise, and timing for analysis.']
-        },
         controller: {
-            title: 'Execution layer',
-            body: 'The execution layer turns selected action chunks into smooth robot motion. It interpolates the chosen trajectory, keeps motion inside the usable workspace, and coordinates safe stopping or reset behavior.',
-            bullets: ['Smooths short-horizon action chunks before they reach the robot.', 'Handles stale predictions and trial-end behavior.', 'Supports both stiff goal-directed assistance and more compliant interaction.'],
+            title: 'Execution',
+            body: 'The execution layer builds a recent interaction history, sends it to a GPU server, receives the selected action chunk, and turns it into smooth robot motion. The server proposes 40 candidate action chunks, evaluates them with the World Model and EFE, and returns the action expected to best balance task progress and uncertainty reduction.',
+            bullets: ['30 Hz observation and update loop with 10-step planning phases.', 'Predictions are made in advance and precomputed so selected actions arrive at the robot on time without delay.', 'Startup and handoff logic moves the robot into the box-grab pose and returns it to a usable pose after success, timeout, or stacking transitions.', 'Handles stale predictions, workspace limits, and trial-end behavior.'],
             figure: {
                 src: './assets/images/realtime-inference.png',
                 alt: 'Real-time inference architecture diagram',
-                caption: 'Real-time inference architecture used to connect policy prediction, world-model update, action execution, and visualization.'
+                caption: 'Real-time inference architecture used to connect Policy Model prediction, World Model update, action execution.'
             }
-        },
-        path: {
-            title: 'Startup and handoff',
-            body: 'The handoff logic moves the robot into the correct physical setup before inference starts and returns it to a usable pose after success, timeout, or continuous stacking transitions.',
-            bullets: ['Moves up, over, down, and forward into the box-grab pose.', 'Waits for controller readiness and grab-force readiness.', 'Runs reset handoff after success, timeout, or continuous stacking transitions.']
         },
         franka: {
             title: 'Low-level Franka control',
             body: 'The low-level controller stack turns selected actions into compliant robot motion. Impedance control tracks commanded end-effector poses, while admittance control converts human-applied force into yielding motion around the equilibrium pose.',
-            bullets: ['Cartesian impedance tracks selected pose commands with stiffness, damping, torque limits, wrench limits, startup protection, and first-command smoothing.', 'Cartesian admittance maps measured external wrench into compliant motion and supports human-following behavior.', 'Controller-side limits and startup ramps reduce abrupt command changes.']
+            bullets: ['Cartesian impedance tracks selected pose commands with stiffness, damping, torque limits, wrench limits, startup protection, and first-command smoothing.', 'Workspace, velocity, and torque limits constrain the motion to maintain safe robot behavior.', 'Cartesian admittance maps measured external wrench into compliant motion and supports human-following behavior.', 'Controller-side limits and startup ramps reduce abrupt command changes.']
         },
         viz: {
             title: 'Visualization and recording',
